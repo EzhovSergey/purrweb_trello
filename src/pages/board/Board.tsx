@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 import { Board as SBoard } from './Board.style';
+import { ColumnsList } from './components';
+import { state } from '../../api/index'
 
 type props = {
 
@@ -7,7 +9,9 @@ type props = {
 
 const Board: FC<props> = () => {
   return (
-    <SBoard>hello</SBoard>
+    <SBoard>
+      <ColumnsList columns={state.columns}/>
+    </SBoard>
   )
 }
 
