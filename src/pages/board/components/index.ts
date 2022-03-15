@@ -1,1 +1,2 @@
-export { Column } from './column/Column'
+export { Column } from './column/Column';
+export { ColumnsList } from './columnsList/ColumnsList';
