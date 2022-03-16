@@ -1,25 +1,27 @@
 import React, { FC } from 'react';
-import { Card as CardType } from '../../../../common/types';
+import { BoardFuntionsProps, Card as CardType } from '../../../../common/types';
 import { Card as SCard } from './Card.style';
 
-type props = {
+type props = Pick<BoardFuntionsProps,
+ 'handleCreateComment' | 'handleDeleteCard'
+| 'handleDeleteComment' | 'handleUpdateCard' | 'handleUpdateComment'> & {
   card: CardType;
 } 
 
-export const Card: FC<props> = ({ card }) => {
+export const Card: FC<props> = (props) => {
   const renderCountComments = () => {
-    if(!card.comments?.length) {
+    if(!props.card.comments?.length) {
       return null;
     }
 
     return (
-      <p>{ card.comments.length }</p>
+      <p>{ props.card.comments.length }</p>
     )
   } 
 
   return (
     <SCard>
-      <h3>{ card.name }</h3>
+      <h3>{ props.card.name }</h3>
       {renderCountComments()}
     </SCard>
   )
