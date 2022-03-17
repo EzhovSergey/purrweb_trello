@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Column as ColumnType, BoardFuntionsProps } from '../../../../common/types';
+import { SyntheticInput } from '../../../../components';
 import { CardsList } from '../index';
 import { Column as SColumn } from './Column.style';
 
@@ -11,9 +12,14 @@ type props = Pick<BoardFuntionsProps,
 }
 
 export const Column: FC<props> = (props) => {
+
+  const changeColumnName = (value: string): void => {
+    props.handleUpdateColumn(props.column.id, { name: value })
+  }
+
   return (
     <SColumn>
-      <h2>{props.column.name}</h2>
+      <SyntheticInput startValue={props.column.name} changeValue={changeColumnName} />
       <CardsList
         columnId={props.column.id}
         cards={props.column.cards}
