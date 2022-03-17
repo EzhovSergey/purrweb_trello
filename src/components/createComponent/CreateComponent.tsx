@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { useInput } from "../../hooks/useInput";
+import { ExitButton } from "..";
 import { ButtonCreate, FormCreate } from './CreateComponent.style'
 
 type props = {
@@ -40,7 +41,7 @@ export const CreateComponent: FC<props> = ({ type, handleCreateComponent }) => {
                 ? 'колонку'
                 : 'карточку'}
             </button>
-            <button onClick={() => exit()}>&#10006;</button>
+            <ExitButton onClick={() => exit()} />
           </FormCreate>
       }
     </>

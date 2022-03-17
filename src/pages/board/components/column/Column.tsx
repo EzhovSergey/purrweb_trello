@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Column as ColumnType, BoardFuntionsProps } from '../../../../common/types';
-import { SyntheticInput } from '../../../../components';
+import { ExitButton, SyntheticInput } from '../../../../components';
 import { CardsList } from '../index';
 import { Column as SColumn } from './Column.style';
 
@@ -20,6 +20,7 @@ export const Column: FC<props> = (props) => {
   return (
     <SColumn>
       <SyntheticInput startValue={props.column.name} changeValue={changeColumnName} />
+      <ExitButton onClick={() => props.handleDeleteColumn} />
       <CardsList
         columnId={props.column.id}
         cards={props.column.cards}
