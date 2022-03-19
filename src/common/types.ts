@@ -7,7 +7,7 @@ export type Card = {
   id: string;
   columnId: string;
   name: string;
-  authorId: string;
+  authorName: string;
   content?: string;
 }
 
@@ -15,7 +15,7 @@ export type Comment = {
   id: string;
   cardId: string;
   body: string;
-  authorId: string;
+  authorName: string;
 }
 
 export type User = {

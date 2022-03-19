@@ -1,7 +1,7 @@
 import uniqid from 'uniqid';
 import { Column, User } from '../common/types';
 
-export const usersStoreKey = 'users';
+export const userStoreKey = 'users';
 export const columnsStoreKey = 'columns';
 export const cardsStoreKey = 'cards';
 export const commentsStoreKey = 'comments';
@@ -12,10 +12,10 @@ export const initializeStore = () => {
 }
 
 const persistUser = () => {
-  const isUserPersisted = localStorage.getItem(usersStoreKey);
+  const isUserPersisted = localStorage.getItem(userStoreKey);
   if (!isUserPersisted) {
-    const initialUsers = [] as User[];
-    localStorage.setItem(usersStoreKey, JSON.stringify(initialUsers));
+    const initialUser = {} as User;
+    localStorage.setItem(userStoreKey, JSON.stringify(initialUser));
   }
 }
 
