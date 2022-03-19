@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useInput } from "../hooks";
 import { Button, Input } from "../ui";
 
 const CreateCard = () => {
   const [isCreate, setIsCreate] = useState(false);
+  const { bind, value } = useInput();
 
-  const createCard = (value: string) => {
-    if(value !== '') {
+  const createCard = () => {
+    if (value !== '') {
       // create
     }
 
@@ -24,10 +26,10 @@ const CreateCard = () => {
           :
           <SNewCard>
             <Input
+              {...bind}
               placeholder={'Введите заголовок для карточки'}
-              changeValue={createCard}
-              autoFocus={true}
             />
+            <Button onClick={() => createCard()}>Добавить карточку</Button>
             <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
           </SNewCard>
       }

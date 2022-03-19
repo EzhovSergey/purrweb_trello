@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useInput } from "../hooks";
 import { Button, Input } from "../ui";
 
 const CreateColumn = () => {
   const [isCreate, setIsCreate] = useState(false);
+  const { bind, value, clear } = useInput();
 
-  const createColumn = (value: string) => {
-    if(value !== '') {
+  const createColumn = () => {
+    if (!!!value) {
       // create
     }
 
     setIsCreate(false)
+    clear();
   }
 
   return (
@@ -24,10 +27,10 @@ const CreateColumn = () => {
           :
           <SNewColumn>
             <Input
+              {...bind}
               placeholder={'Введите заголовок колонки'}
-              changeValue={createColumn}
-              autoFocus={true}
             />
+            <Button onClick={() => createColumn()}>Добавить колонку</Button>
             <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
           </SNewColumn>
       }

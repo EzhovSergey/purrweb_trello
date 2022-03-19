@@ -4,6 +4,7 @@ import { Column as ColumnType, Card as CardType } from '../common/types';
 import { Card, CreateCard } from '.';
 import { Button, Input } from '../ui';
 import { getCardsByColumnId } from '../store';
+import { useInputBlur } from '../hooks';
 
 const Column = (props: ColumnProps) => {
   const [cards, setCards] = useState<CardType[]>([]);
@@ -11,6 +12,9 @@ const Column = (props: ColumnProps) => {
   const changeColumnName = (value: string) => {
 
   }
+
+  const { bind, value } = useInputBlur(changeColumnName);
+
 
   const deleteColumn = () => {
 
@@ -27,10 +31,10 @@ const Column = (props: ColumnProps) => {
 
   return (
     <SColumn>
-      <Input initialValue={props.column.name} changeValue={changeColumnName}/>
+      <Input {...bind} />
       <Button onClick={deleteColumn}>&#10006;</Button>
       {
-        cards.map(card => 
+        cards.map(card =>
           <Card
             key={card.id}
             card={card}
