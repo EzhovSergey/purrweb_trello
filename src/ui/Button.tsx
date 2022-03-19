@@ -7,16 +7,13 @@ const Button = (props: ButtonProps) => {
     <SButton
       onClick={props.onClick}
     >
-      { props.children }
+      {props.children}
     </SButton>
   )
 }
 
 export default Button;
 
-type ButtonProps = {
-  children?: ReactChild;
-  onClick: () => void;
-}
+type ButtonProps = React.HTMLAttributes<HTMLButtonElement>
 
 const SButton = styled.button``;
