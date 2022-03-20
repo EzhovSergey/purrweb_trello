@@ -7,3 +7,4 @@ export { default as CardOpenHeader } from './CardOpenHeader';
 export { default as CardOpenContent } from './CardOpenContent';
 export { default as CardOpenComments } from './CardOpenComments';
 export { default as Comment } from './Comment';
+export { default as CardOpen } from './CardOpen';

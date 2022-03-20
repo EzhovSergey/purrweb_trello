@@ -1,37 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
+import { Card as CardType } from '../common/types';
 import { store } from '../store';
-import { Card as CardType, Comment } from '../common/types';
-import { Button } from '../ui';
+import { Button, Modal } from '../ui';
+import { CardOpen } from '.';
 
 const Card = (props: CardProps) => {
-  const [comments, setComments] = useState<Comment[]>([])
-
-  const fetchComments = () => {
-    const commentsByStore = store.getCommentsByCardId(props.card.id)
-    setComments(commentsByStore)
-  }
-
-  useEffect(() => {
-    fetchComments()
-  }, [])
+  const [countComments, setCountComments] = useState(store.getCommentsCount(props.card.id));
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const renderCountComments = () => {
-    if (!comments.length) {
-      return null;
+    if (!countComments) {
+      return <></>;
     }
 
     return (
-      <p>{comments.length}</p>
+      <p>{countComments}</p>
     )
   }
 
+  const deleteCard = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    props.deleteCard(props.card.id)
+  }
+
+  const changeCountComments = (count: number) => {
+    setCountComments(oldCount => oldCount + count)
+  }
+
   return (
-    <SCard>
-      <h3>{props.card.name}</h3>
-      <Button onClick={() => props.deleteCard(props.card.id)}>&#10006;</Button>
-      {renderCountComments()}
-    </SCard>
+    <>
+      <SCard onClick={() => setIsOpenModal(true)}>
+        <h3>{props.card.name}</h3>
+        <Button onClick={e => deleteCard(e)}>&#10006;</Button>
+        {renderCountComments()}
+      </SCard>
+      <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
+        <CardOpen
+          card={props.card}
+          closeCard={() => setIsOpenModal(false)}
+          updateCard={props.updateCard}
+          deleteCard={props.deleteCard}
+          changeCountComments={changeCountComments}
+        />
+      </Modal>
+    </>
   )
 }
 

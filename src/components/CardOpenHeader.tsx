@@ -14,7 +14,7 @@ const CardOpenHeader = (props: CardOpenHeaderProps) => {
   return (
     <SCardOpenHeader>
       <Input {...bindName} />
-      <Button onClick={() => props.closeCard}>&#10006;</Button>
+      <Button onClick={() => props.closeCard()}>&#10006;</Button>
       <SInfo>
         в колонке {store.getColumnOne(props.card.columnId).name}
         автор колонки {props.card.authorName}
