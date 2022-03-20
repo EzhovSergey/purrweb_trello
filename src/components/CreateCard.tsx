@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useInput } from "../hooks";
+import { store } from "../store";
 import { Button, Input } from "../ui";
 
-const CreateCard = () => {
+const CreateCard = (props: CreateCardProps) => {
   const [isCreate, setIsCreate] = useState(false);
   const { bind, value } = useInput();
 
   const createCard = () => {
-    if (value !== '') {
-      // create
+    if (value) {
+      props.createCard(value)
     }
 
     setIsCreate(false)
@@ -38,6 +39,10 @@ const CreateCard = () => {
 }
 
 export default CreateCard;
+
+type CreateCardProps = {
+  createCard: (name: string) => void;
+}
 
 const SCreateCard = styled.div``;
 

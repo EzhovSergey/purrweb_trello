@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useInput } from "../hooks";
+import { store } from "../store";
 import { Button, Input } from "../ui";
 
-const CreateColumn = () => {
+const CreateColumn = (props: CreateColumnProps) => {
   const [isCreate, setIsCreate] = useState(false);
   const { bind, value, clear } = useInput();
 
   const createColumn = () => {
-    if (!!!value) {
-      // create
+    if (value) {
+      props.createColumn(value);
     }
 
-    setIsCreate(false)
+    setIsCreate(false);
     clear();
   }
 
@@ -39,6 +40,10 @@ const CreateColumn = () => {
 }
 
 export default CreateColumn;
+
+type CreateColumnProps = {
+  createColumn: (value: string) => void;
+}
 
 const SCreateColumn = styled.div``;
 
