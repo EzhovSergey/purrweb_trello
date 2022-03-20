@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Column as ColumnType } from './common/types';
-import { Column, CreateColumn } from './components';
+import { Column as ColumnType, User } from './common/types';
+import { Column, CreateColumn, Header } from './components';
 import { useInput } from './hooks';
 import { store } from './store';
 import { Button, Input, Modal } from './ui';
 
 function App() {
   const [columns, setColumns] = useState<ColumnType[]>([]);
+  const [user, setUser] = useState<User>();
   const [isOpen, setIsOpen] = useState(false);
   const { bind, value, clear } = useInput();
 
@@ -15,10 +16,16 @@ function App() {
     if (!value) {
       return;
     }
-    store.setUser(value);
-
+    const user = store.setUser(value);
+    setUser(user);
     setIsOpen(false);
     clear();
+  }
+
+  const deleteUser = () => {
+    store.deleteUser();
+    setUser(undefined);
+    setIsOpen(true);
   }
 
   const createColumn = (name: string) => {
@@ -46,9 +53,11 @@ function App() {
   }
 
   const fetchUser = () => {
-    if (!store.getUser()) {
-      setIsOpen(true)
+    const user = store.getUser();
+    if (!user) {
+      setIsOpen(true);
     }
+    setUser(user);
   }
 
   useEffect(() => {
@@ -73,9 +82,10 @@ function App() {
 
   return (
     <>
-      <Columns>
+      <Header user={user} deleteUser={deleteUser} isSignIn={() => setIsOpen(true)} />
+      <SColumns>
         {renderColumns()}
-      </Columns>
+      </SColumns>
       <CreateColumn createColumn={createColumn} />
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <h1>Введите свое имя</h1>
@@ -89,4 +99,4 @@ function App() {
 
 export default App;
 
-const Columns = styled.div``;
+const SColumns = styled.div``;
