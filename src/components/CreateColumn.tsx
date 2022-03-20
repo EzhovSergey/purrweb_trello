@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useInput } from "../hooks";
-import { store } from "../store";
 import { Button, Input } from "../ui";
 
 const CreateColumn = (props: CreateColumnProps) => {
