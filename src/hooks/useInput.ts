@@ -8,7 +8,7 @@ export const useInput = (defaultValue = '') => {
       value,
       onChange: (event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)
     },
-    clear: () => setValue(defaultValue),
+    clear: () => setValue(''),
     value,
   }
 }
