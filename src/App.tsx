@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Normalize } from 'styled-normalize';
 import { Column as ColumnType, User } from './common/types';
 import { Column, CreateColumn, Header } from './components';
 import { useInput } from './hooks';
@@ -82,6 +83,7 @@ function App() {
 
   return (
     <>
+      <Normalize />
       <Header user={user} deleteUser={deleteUser} isSignIn={() => setIsOpen(true)} />
       <SColumns>
         {renderColumns()}
