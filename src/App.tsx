@@ -105,11 +105,12 @@ function App() {
 export default App;
 
 const Body = styled.div`
+  margin-top: 100px;
 `;
 
 const SColumns = styled.div`
   display: flex;
-  margin: 5vh;
+  margin: 0 5vh;
 `;
 
 const SFormAuth = styled.div`

@@ -78,7 +78,7 @@ type ColumnProps = {
 
 const SColumn = styled.section`
   margin-right: 2em;
-  width: 260px;
+  min-width: 260px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.07);
   padding: 0.6em;

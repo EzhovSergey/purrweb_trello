@@ -15,7 +15,7 @@ const Card = (props: CardProps) => {
     }
 
     return (
-      <p>{countComments}</p>
+      <p>&#9993; {countComments}</p>
     )
   }
 
@@ -32,8 +32,12 @@ const Card = (props: CardProps) => {
     <>
       <SCard onClick={() => setIsOpenModal(true)}>
         <SCardName>{props.card.name}</SCardName>
-        <Button onClick={e => deleteCard(e)}>&#10006;</Button>
-        {renderCountComments()}
+        <div>
+          <Button onClick={e => deleteCard(e)}>&#10006;</Button>
+          <SCountComments>
+            {renderCountComments()}
+          </SCountComments>
+        </div>
       </SCard>
       <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
         <CardOpen
@@ -71,4 +75,10 @@ const SCardName = styled.span`
   width: 80%;
   padding: 0.5em;
   overflow-wrap: break-word;
+`;
+
+const SCountComments = styled.div`
+  display: flex;
+  align-items: center;
+  height: 1.5em;
 `;

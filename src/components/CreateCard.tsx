@@ -5,7 +5,7 @@ import { Button, Input } from "../ui";
 
 const CreateCard = (props: CreateCardProps) => {
   const [isCreate, setIsCreate] = useState(false);
-  const { bind, value } = useInput();
+  const { bind, value, clear } = useInput();
 
   const createCard = () => {
     if (value) {
@@ -13,6 +13,7 @@ const CreateCard = (props: CreateCardProps) => {
     }
 
     setIsCreate(false)
+    clear();
   }
 
   return (

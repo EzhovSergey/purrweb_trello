@@ -36,12 +36,18 @@ type HeaderProps = {
 }
 
 const SHeader = styled.header`
+  position: fixed;
   background-color: #B1A296;
   height: 70px;
+  top: 0;
+  width: 100vw;
   display: flex;
   justify-content: right;
   align-items: center;
-  padding-right: 7%;
+
+  > Button {
+    margin-right: 4em;
+  }
 `;
 
 const SUserName = styled.span`
