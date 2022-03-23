@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Normalize } from 'styled-normalize';
-import { Column as ColumnType, User } from './common/types';
+import { Column as ColumnType, User } from './types';
 import { Column, CreateColumn, Header } from './components';
 import { useInput } from './hooks';
 import { store } from './store';

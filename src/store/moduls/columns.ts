@@ -1,7 +1,7 @@
 import uniqId from 'uniqid'
 import { deleteCard, getCardsByColumnId } from '.';
 import { columnsStoreKey } from '..'
-import { Column } from '../../common/types';
+import { Column } from '../../types';
 
 export const getColumns = () => {
   const columnsFromStorage = localStorage.getItem(columnsStoreKey) || '[]';

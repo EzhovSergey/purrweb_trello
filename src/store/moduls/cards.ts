@@ -1,7 +1,7 @@
 import uniqId from 'uniqid';
 import { getUser, deleteComment, getCommentsByCardId } from '.';
 import { cardsStoreKey } from '..'
-import { Card } from '../../common/types';
+import { Card } from '../../types';
 
 export const getCards = () => {
   const cardsFromStorage = localStorage.getItem(cardsStoreKey) || '[]';
