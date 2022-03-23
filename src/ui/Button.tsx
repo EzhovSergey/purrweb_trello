@@ -26,7 +26,7 @@ const SButton = styled.button`
   border-radius: 2px;
   border: none;
   width: ${props => props.theme.width + 'px' || 'max-content'};
-  padding: 0.4em;
+  padding: 0.2em;
 
   :hover {
     opacity: 0.7;
