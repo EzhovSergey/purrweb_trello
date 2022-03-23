@@ -16,7 +16,7 @@ const CreateCard = (props: CreateCardProps) => {
   }
 
   return (
-    <SCreateCard>
+    <>
       {
         !isCreate
           ?
@@ -29,11 +29,11 @@ const CreateCard = (props: CreateCardProps) => {
               {...bind}
               placeholder={'Введите заголовок для карточки'}
             />
-            <Button onClick={() => createCard()}>Добавить карточку</Button>
+            <Button isColor={true} onClick={() => createCard()}>Добавить карточку</Button>
             <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
           </SNewCard>
       }
-    </SCreateCard>
+    </>
   )
 }
 
@@ -43,6 +43,16 @@ type CreateCardProps = {
   createCard: (name: string) => void;
 }
 
-const SCreateCard = styled.div``;
+const SNewCard = styled.div`
 
-const SNewCard = styled.div``;
+  > Input {
+    width: 100%;
+    padding: 0.5em;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+  }
+
+  > Button {
+    margin-right: 0.5em;
+  }
+`;

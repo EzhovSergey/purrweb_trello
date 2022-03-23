@@ -13,12 +13,12 @@ const Header = (props: HeaderProps) => {
             <SUserName>
               {props.user.name}
             </SUserName>
-            <Button onClick={() => props.deleteUser()}>
+            <Button isColor={true} onClick={() => props.deleteUser()}>
               Выйти
             </Button>
           </>
           :
-          <Button onClick={() => props.isSignIn()}>
+          <Button isColor={true} onClick={() => props.isSignIn()}>
             Войти
           </Button>
       }
@@ -35,6 +35,16 @@ type HeaderProps = {
   deleteUser: () => void;
 }
 
-const SHeader = styled.header``;
+const SHeader = styled.header`
+  background-color: #B1A296;
+  height: 70px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  padding-right: 7%;
+`;
 
-const SUserName = styled.span``;
+const SUserName = styled.span`
+  font-size: 24px;
+  margin-right: 1em;
+`;

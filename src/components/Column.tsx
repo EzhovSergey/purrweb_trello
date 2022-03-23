@@ -58,8 +58,10 @@ const Column = (props: ColumnProps) => {
 
   return (
     <SColumn>
-      <Input {...bind} />
-      <Button onClick={() => props.deleteColumn(props.column.id)}>&#10006;</Button>
+      <STitleColumn>
+        <Input isTransparent={true} {...bind} />
+        <Button onClick={() => props.deleteColumn(props.column.id)}>&#10006;</Button>
+      </STitleColumn>
       {renderCards()}
       <CreateCard createCard={createCard} />
     </SColumn>
@@ -74,4 +76,21 @@ type ColumnProps = {
   deleteColumn: (id: string) => void;
 }
 
-const SColumn = styled.section``;
+const SColumn = styled.section`
+  margin-right: 2em;
+  width: 260px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.07);
+  padding: 0.6em;
+  height: max-content;
+`;
+
+const STitleColumn = styled.header`
+  margin: 0 0.5em;
+  display: flex;
+  justify-content: space-between;
+
+  > Input {
+    width: 100%;
+  }
+`;

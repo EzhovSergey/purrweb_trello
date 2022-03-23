@@ -37,4 +37,7 @@ type CardOpenProps = {
   changeCountComments: (count: number) => void;
 }
 
-const SCardOpen = styled.div``;
+const SCardOpen = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

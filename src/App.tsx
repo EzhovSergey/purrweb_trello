@@ -85,20 +85,51 @@ function App() {
     <>
       <Normalize />
       <Header user={user} deleteUser={deleteUser} isSignIn={() => setIsOpen(true)} />
-      <SColumns>
-        {renderColumns()}
-      </SColumns>
-      <CreateColumn createColumn={createColumn} />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <h1>Введите свое имя</h1>
-        <Button onClick={() => setIsOpen(false)}>&#10006;</Button>
-        <Input {...bind} />
-        <Button onClick={createUser} >Войти</Button>
-      </Modal>
+      <Body>
+        <SColumns>
+          {renderColumns()}
+          <CreateColumn createColumn={createColumn} />
+        </SColumns>
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          <SFormAuth>
+            <SFormTitle>Введите свое имя</SFormTitle>
+            <Input {...bind} />
+            <Button isColor={true} onClick={createUser} >Войти</Button>
+          </SFormAuth>
+        </Modal>
+      </Body>
     </>
   );
 }
 
 export default App;
 
-const SColumns = styled.div``;
+const Body = styled.div`
+`;
+
+const SColumns = styled.div`
+  display: flex;
+  margin: 5vh;
+`;
+
+const SFormAuth = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 200px;
+
+  > Input {
+    width: 60%;
+    padding: 0.4em;
+  }
+
+  > Button {
+    width: 25%;
+  }
+`;
+
+const SFormTitle = styled.span`
+  font-size: 24px;
+`;

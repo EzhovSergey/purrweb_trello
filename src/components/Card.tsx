@@ -31,7 +31,7 @@ const Card = (props: CardProps) => {
   return (
     <>
       <SCard onClick={() => setIsOpenModal(true)}>
-        <h3>{props.card.name}</h3>
+        <SCardName>{props.card.name}</SCardName>
         <Button onClick={e => deleteCard(e)}>&#10006;</Button>
         {renderCountComments()}
       </SCard>
@@ -56,4 +56,19 @@ type CardProps = {
   deleteCard: (id: string) => void;
 }
 
-const SCard = styled.section``;
+const SCard = styled.section`
+  display: flex;
+  background-color: #FFF;
+  border-radius: 5px;
+  margin: 1em 0;
+
+  > Button {
+    height: 2em;
+  }
+`;
+
+const SCardName = styled.span`
+  width: 80%;
+  padding: 0.5em;
+  overflow-wrap: break-word;
+`;

@@ -30,7 +30,7 @@ const CreateColumn = (props: CreateColumnProps) => {
               {...bind}
               placeholder={'Введите заголовок колонки'}
             />
-            <Button onClick={() => createColumn()}>Добавить колонку</Button>
+            <Button isColor={true} onClick={() => createColumn()}>Добавить колонку</Button>
             <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
           </SNewColumn>
       }
@@ -46,4 +46,21 @@ type CreateColumnProps = {
 
 const SCreateColumn = styled.div``;
 
-const SNewColumn = styled.div``;
+const SNewColumn = styled.div`
+box-sizing: border-box;
+  width: 260px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.07);
+  padding: 0.6em;
+
+  > Input {
+    padding: 0.5em;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+    width: 100%;
+  }
+
+  > Button {
+    margin-right: 0.5em;
+  }
+`;
