@@ -53,14 +53,16 @@ const CardOpenComments = (props: CardOpenCommentsProps) => {
       return (
         <>
           <Input {...bind} />
-          <Button onClick={() => createComment(value)}>Сохранить</Button>
-          <Button onClick={exitCreate}>&#10006;</Button>
+          <div>
+            <Button isColor={true} onClick={() => createComment(value)}>Сохранить</Button>
+            <Button onClick={exitCreate}>&#10006;</Button>
+          </div>
         </>
       )
     }
 
     return (
-      <Button onClick={() => setIsCreateComment(true)}>Добавить</Button>
+      <Button isColor={true} onClick={() => setIsCreateComment(true)}>Добавить</Button>
     )
   }
 
@@ -81,7 +83,7 @@ const CardOpenComments = (props: CardOpenCommentsProps) => {
 
   return (
     <SComments>
-      Комметарии
+      <b>Комметарии</b>
       {renderCreateComment()}
       {renderComments()}
     </SComments>
@@ -95,4 +97,15 @@ type CardOpenCommentsProps = {
   changeCountComments: (count: number) => void;
 }
 
-const SComments = styled.div``;
+const SComments = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  > Button {
+    width: 100px;
+  }
+
+  > Input {
+    margin: 0.6em 0;
+  }
+`;

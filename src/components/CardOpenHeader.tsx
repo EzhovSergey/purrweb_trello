@@ -13,11 +13,10 @@ const CardOpenHeader = (props: CardOpenHeaderProps) => {
 
   return (
     <SCardOpenHeader>
-      <Input {...bindName} />
-      <Button onClick={() => props.closeCard()}>&#10006;</Button>
+      <Input isTransparent={true} {...bindName} />
       <SInfo>
-        в колонке {store.getColumnOne(props.card.columnId).name}
-        автор колонки {props.card.authorName}
+        в колонке <u>{store.getColumnOne(props.card.columnId).name}</u>&nbsp;
+        автор колонки <u>{props.card.authorName}</u>
       </SInfo>
     </SCardOpenHeader>
   )
@@ -31,6 +30,14 @@ type CardOpenHeaderProps = {
   updateCard: (updateCard: { name?: string, content?: string }) => void;
 }
 
-const SCardOpenHeader = styled.header``;
+const SCardOpenHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3em;
+
+  > Input {
+    font-size: 1.5em;
+  }
+`;
 
 const SInfo = styled.span``;

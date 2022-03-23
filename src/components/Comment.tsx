@@ -19,26 +19,30 @@ const Comment = (props: CommentProps) => {
       return (
         <>
           <Input {...bind} />
-          <Button onClick={() => updateComment()}>Сохранить</Button>
-          <Button onClick={() => setIsUpdate(false)}>&#10006;</Button>
+          <SButtons>
+            <Button isColor={true} onClick={() => updateComment()}>Сохранить</Button>
+            <Button onClick={() => setIsUpdate(false)}>&#10006;</Button>
+          </SButtons>
         </>
       )
     }
 
     return (
       <>
-        <span>{props.comment.body}</span>
-        <Button onClick={() => setIsUpdate(true)}>Изменить</Button>
-        <Button onClick={() => props.deleteComment(props.comment.id)}>&#10006;</Button>
+        <SCommentText>{props.comment.body}</SCommentText>
+        <SButtons>
+          <Button onClick={() => setIsUpdate(true)}>Изменить</Button>
+          <Button onClick={() => props.deleteComment(props.comment.id)}>Удалить</Button>
+        </SButtons>
       </>
     )
   }
 
   return (
     <SComment>
-      <span>
+      <SAuthorName>
         {props.comment.authorName}
-      </span>
+      </SAuthorName>
       {renderComment()}
     </SComment>
   )
@@ -53,4 +57,22 @@ type CommentProps = {
 }
 
 
-const SComment = styled.div``;
+const SComment = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+`;
+
+const SButtons = styled.div`
+  
+`;
+
+const SCommentText = styled.span`
+  background-color: rgba(0, 0, 0, .1);
+  padding: .2em;
+  margin: .2em;
+`;
+
+const SAuthorName = styled.span`
+  font-size: small;
+`;

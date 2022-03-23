@@ -26,34 +26,32 @@ const CardOpenContent = (props: CardOpenContentProps) => {
   const renderContent = () => {
     if (props.content && !isChangeContent) {
       return (
-        <>
+        <SUpdateContent>
+          <p>{props.content}</p>
           <Button onClick={() => setIsChangeContent(true)}>Изменить</Button>
           <Button onClick={deleteContent}>Удалить</Button>
-          {props.content}
-        </>
+        </SUpdateContent>
       )
     }
 
     if (!props.content && !isChangeContent) {
       return (
-        <Button onClick={() => setIsChangeContent(true)}>Добавить</Button>
+        <Button isColor={true} onClick={() => setIsChangeContent(true)}>Добавить</Button>
       )
     }
 
-
-
     return (
-      <>
+      <SCreateComment>
         <Input {...bindContent} />
-        <Button onClick={updateCard}>Сохранить</Button>
+        <Button isColor={true} onClick={updateCard}>Сохранить</Button>
         <Button onClick={exitChange}>&#10006;</Button>
-      </>
+      </SCreateComment>
     )
   }
 
   return (
     <SContent>
-      Описание
+      <b>Описание</b>
       {renderContent()}
     </SContent>
   )
@@ -66,4 +64,27 @@ type CardOpenContentProps = {
   updateCard: (updateCard: { name?: string, content?: string }) => void;
 }
 
-const SContent = styled.div``;
+const SContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3em;
+
+  > Button {
+    width: 100px;
+  }
+`;
+
+
+const SCreateComment = styled.div`
+
+  > Input {
+    margin-top: .5em;
+    width: 80%;
+  }
+
+  > Button {
+    margin: 1em .5em 1em 0;
+  }
+`;
+
+const SUpdateContent = styled.div``;
