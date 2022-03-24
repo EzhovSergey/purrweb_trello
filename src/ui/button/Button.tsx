@@ -6,7 +6,7 @@ const Button = (props: ButtonProps) => {
   return (
     <Root
       theme={{ ...props }}
-      onClick={props.onClick}
+      {...props}
     >
       {props.children}
     </Root>
@@ -21,11 +21,11 @@ type ButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
 }
 
 const Root = styled.button`
-  background-color: ${props => props.theme.isColor ? '#1E90FF' : 'transparent'};
-  color: ${props => props.theme.isColor ? '#FFFFFF' : 'gray'};
+  background-color: ${({ theme: { isColor } }) => isColor ? '#1E90FF' : 'transparent'};
+  color: ${({ theme: { isColor } }) => isColor ? '#FFFFFF' : 'gray'};
   border-radius: 2px;
   border: none;
-  width: ${props => props.theme.width + 'px' || 'max-content'};
+  width: ${({ theme: { width } }) => width + 'px' || 'max-content'};
   padding: 0.2em;
 
   :hover {

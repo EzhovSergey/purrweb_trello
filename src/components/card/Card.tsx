@@ -5,8 +5,8 @@ import { store } from '../../store';
 import { Button, Modal } from '../../ui';
 import { CardOpen } from '..';
 
-const Card = (props: CardProps) => {
-  const [countComments, setCountComments] = useState(store.getCommentsCount(props.card.id));
+const Card = ({ card, updateCard, deleteCard }: CardProps) => {
+  const [countComments, setCountComments] = useState(store.getCommentsCount(card.id));
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const renderCountComments = () => {
@@ -19,9 +19,9 @@ const Card = (props: CardProps) => {
     )
   }
 
-  const deleteCard = (e: React.MouseEvent) => {
+  const handleDeleteCard = (e: React.MouseEvent) => {
     e.stopPropagation()
-    props.deleteCard(props.card.id)
+    deleteCard(card.id)
   }
 
   const changeCountComments = (count: number) => {
@@ -31,9 +31,9 @@ const Card = (props: CardProps) => {
   return (
     <>
       <Root onClick={() => setIsOpenModal(true)}>
-        <Name>{props.card.name}</Name>
+        <Name>{card.name}</Name>
         <div>
-          <Button onClick={e => deleteCard(e)}>&#10006;</Button>
+          <Button onClick={e => handleDeleteCard(e)}>&#10006;</Button>
           <Comments>
             {renderCountComments()}
           </Comments>
@@ -41,10 +41,8 @@ const Card = (props: CardProps) => {
       </Root>
       <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
         <CardOpen
-          card={props.card}
-          closeCard={() => setIsOpenModal(false)}
-          updateCard={props.updateCard}
-          deleteCard={props.deleteCard}
+          card={card}
+          updateCard={updateCard}
           changeCountComments={changeCountComments}
         />
       </Modal>

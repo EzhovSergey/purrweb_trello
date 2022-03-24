@@ -3,23 +3,23 @@ import styled from "styled-components";
 import { Comment as CommentType } from "../../../../../../types";
 import { Button, Input } from "../../../../../../ui";
 
-const Comment = (props: CommentProps) => {
+const Comment = ({ comment, updateComment, deleteComment }: CommentProps) => {
   const [isUpdate, setIsUpdate] = useState(false);
-  const [comment, setComment] = useState(props.comment.body);
+  const [commentValue, setCommentValue] = useState(comment.body);
 
-  const updateComment = () => {
-    props.updateComment(props.comment.id, comment);
+  const handleUpdateComment = () => {
+    updateComment(comment.id, commentValue);
     setIsUpdate(false)
-    setComment('');
+    setCommentValue('');
   }
 
   const renderComment = () => {
     if (isUpdate) {
       return (
         <>
-          <Input value={comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)} />
+          <Input value={commentValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCommentValue(e.target.value)} />
           <Buttons>
-            <Button isColor={true} onClick={() => updateComment()}>Сохранить</Button>
+            <Button isColor={true} onClick={() => handleUpdateComment()}>Сохранить</Button>
             <Button onClick={() => setIsUpdate(false)}>&#10006;</Button>
           </Buttons>
         </>
@@ -28,10 +28,10 @@ const Comment = (props: CommentProps) => {
 
     return (
       <>
-        <CommentText>{props.comment.body}</CommentText>
+        <CommentText>{comment.body}</CommentText>
         <Buttons>
           <Button onClick={() => setIsUpdate(true)}>Изменить</Button>
-          <Button onClick={() => props.deleteComment(props.comment.id)}>Удалить</Button>
+          <Button onClick={() => deleteComment(comment.id)}>Удалить</Button>
         </Buttons>
       </>
     )
@@ -40,7 +40,7 @@ const Comment = (props: CommentProps) => {
   return (
     <Root>
       <AuthorName>
-        {props.comment.authorName}
+        {comment.authorName}
       </AuthorName>
       {renderComment()}
     </Root>

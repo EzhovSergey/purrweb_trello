@@ -5,15 +5,15 @@ import { store } from '../../../../store';
 import { Comment } from './components';
 import { Button, Input } from '../../../../ui';
 
-const Comments = (props: CommentsProps) => {
+const Comments = ({ cardId, changeCountComments }: CommentsProps) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isCreateComment, setIsCreateComment] = useState(false);
   const [comment, setComment] = useState('');
 
   const createComment = (body: string) => {
-    const newComment = store.createComment(props.cardId, body);
+    const newComment = store.createComment(cardId, body);
     setComments(comments => [newComment, ...comments]);
-    props.changeCountComments(1);
+    changeCountComments(1);
     setIsCreateComment(false);
     setComment('');
   }
@@ -35,11 +35,11 @@ const Comments = (props: CommentsProps) => {
   const deleteComment = (id: string) => {
     store.deleteComment(id);
     setComments(comments => comments.filter(comment => comment.id !== id));
-    props.changeCountComments(-1);
+    changeCountComments(-1);
   }
 
   const fetchComments = () => {
-    const commentsByStore = store.getCommentsByCardId(props.cardId)
+    const commentsByStore = store.getCommentsByCardId(cardId)
     setComments(commentsByStore)
   }
 

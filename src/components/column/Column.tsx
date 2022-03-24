@@ -6,12 +6,12 @@ import { CreateCard } from './components'
 import { Button, Input } from '../../ui';
 import { store } from '../../store';
 
-const Column = (props: ColumnProps) => {
+const Column = ({ column, updateColumn, deleteColumn }: ColumnProps) => {
   const [cards, setCards] = useState<CardType[]>([]);
-  const [name, setName] = useState(props.column.name);
+  const [name, setName] = useState(column.name);
 
   const createCard = (name: string) => {
-    const newCard = store.createCard(props.column.id, name);
+    const newCard = store.createCard(column.id, name);
     setCards(cards => [...cards, newCard]);
   }
 
@@ -30,7 +30,7 @@ const Column = (props: ColumnProps) => {
   }
 
   const fetchCards = () => {
-    const cardsByStore = store.getCardsByColumnId(props.column.id);
+    const cardsByStore = store.getCardsByColumnId(column.id);
     setCards(cardsByStore);
   }
 
@@ -59,10 +59,10 @@ const Column = (props: ColumnProps) => {
         <Input
           value={name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-          onBlur={() => props.updateColumn(props.column.id, name)}
+          onBlur={() => updateColumn(column.id, name)}
           isTransparent={true}
         />
-        <Button onClick={() => props.deleteColumn(props.column.id)}>&#10006;</Button>
+        <Button onClick={() => deleteColumn(column.id)}>&#10006;</Button>
       </Title>
       {renderCards()}
       <CreateCard createCard={createCard} />

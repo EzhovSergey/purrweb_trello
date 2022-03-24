@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Input } from "../../../../ui";
 
-const CreateCard = (props: CreateCardProps) => {
+const CreateCard = ({ createCard }: CreateCardProps) => {
   const [isCreate, setIsCreate] = useState(false);
   const [name, setName] = useState('');
 
-  const createCard = () => {
+  const handleCreateCard = () => {
     if (name) {
-      props.createCard(name)
+      createCard(name)
     }
 
     setIsCreate(false)
@@ -34,7 +34,7 @@ const CreateCard = (props: CreateCardProps) => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
               placeholder={'Введите заголовок для карточки'}
             />
-            <Button isColor={true} onClick={() => createCard()}>Добавить карточку</Button>
+            <Button isColor={true} onClick={() => handleCreateCard()}>Добавить карточку</Button>
             <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
           </NewCard>
       }
