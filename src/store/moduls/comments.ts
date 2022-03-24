@@ -1,7 +1,7 @@
 import uniqId from 'uniqid';
 import { getUser } from '.';
 import { commentsStoreKey } from '..';
-import { Comment } from '../../common/types';
+import { Comment } from '../../types';
 
 export const getComments = () => {
   const commentsFromStorage = localStorage.getItem(commentsStoreKey) || '[]';

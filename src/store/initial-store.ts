@@ -1,5 +1,5 @@
 import uniqid from 'uniqid';
-import { Column } from '../common/types';
+import { Column } from '../types';
 
 export const userStoreKey = 'user';
 export const columnsStoreKey = 'columns';

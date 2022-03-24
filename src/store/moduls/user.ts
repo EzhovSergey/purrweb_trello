@@ -1,6 +1,6 @@
 import uniqId from 'uniqid';
 import { userStoreKey } from "..";
-import { User } from "../../common/types";
+import { User } from "../../types";
 
 export const getUser = () => {
   const userFromStorage = localStorage.getItem(userStoreKey);
