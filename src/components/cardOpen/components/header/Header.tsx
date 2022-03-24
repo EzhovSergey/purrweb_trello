@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { Card } from '../../../../types';
-import { useInputBlur } from '../../../../hooks';
 import { store } from '../../../../store';
 import { Input } from '../../../../ui';
 
 const Header = (props: HeaderProps) => {
-  const { bind: bindName, value: name } = useInputBlur(
-    value => props.updateCard({ name: value }),
-    props.card.name
-  )
+  const [columnName, setColumnName] = useState(props.card.name)
 
   return (
     <Root>
-      <Input isTransparent={true} {...bindName} />
+      <Input
+        value={columnName}
+        isTransparent={true}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setColumnName(e.target.value)}
+        onBlur={() => props.updateCard({ name: columnName })}
+      />
       <Info>
         в колонке <u>{store.getColumnOne(props.card.columnId).name}</u>&nbsp;
         автор колонки <u>{props.card.authorName}</u>

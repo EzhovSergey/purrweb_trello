@@ -5,14 +5,10 @@ import { Card } from '..';
 import { CreateCard } from './components'
 import { Button, Input } from '../../ui';
 import { store } from '../../store';
-import { useInputBlur } from '../../hooks';
 
 const Column = (props: ColumnProps) => {
   const [cards, setCards] = useState<CardType[]>([]);
-  const { bind, value } = useInputBlur(
-    value => props.updateColumn(props.column.id, value),
-    props.column.name
-  );
+  const [name, setName] = useState(props.column.name);
 
   const createCard = (name: string) => {
     const newCard = store.createCard(props.column.id, name);
@@ -60,7 +56,12 @@ const Column = (props: ColumnProps) => {
   return (
     <Root>
       <Title>
-        <Input isTransparent={true} {...bind} />
+        <Input
+          value={name}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+          onBlur={() => props.updateColumn(props.column.id, name)}
+          isTransparent={true}
+        />
         <Button onClick={() => props.deleteColumn(props.column.id)}>&#10006;</Button>
       </Title>
       {renderCards()}

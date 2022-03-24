@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Comment as CommentType } from "../../../../../../types";
-import { useInput } from "../../../../../../hooks";
 import { Button, Input } from "../../../../../../ui";
 
 const Comment = (props: CommentProps) => {
   const [isUpdate, setIsUpdate] = useState(false);
-  const { bind, value, clear } = useInput(props.comment.body);
+  const [comment, setComment] = useState(props.comment.body);
 
   const updateComment = () => {
-    props.updateComment(props.comment.id, value);
+    props.updateComment(props.comment.id, comment);
     setIsUpdate(false)
-    clear();
+    setComment('');
   }
 
   const renderComment = () => {
     if (isUpdate) {
       return (
         <>
-          <Input {...bind} />
+          <Input value={comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)} />
           <Buttons>
             <Button isColor={true} onClick={() => updateComment()}>Сохранить</Button>
             <Button onClick={() => setIsUpdate(false)}>&#10006;</Button>

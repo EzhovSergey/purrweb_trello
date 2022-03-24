@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
-import { useInput } from '../../../../hooks';
 import { Button, Input } from '../../../../ui';
 
 const Content = (props: ContentProps) => {
   const [isChangeContent, setIsChangeContent] = useState(false);
-  const { bind: bindContent, value: content, clear } = useInput(props.content);
+  const [content, setContent] = useState(props.content);
 
   const exitChange = () => {
     setIsChangeContent(false);
-    clear();
+    setContent('');
   }
 
   const updateCard = () => {
@@ -20,7 +19,7 @@ const Content = (props: ContentProps) => {
   const deleteContent = () => {
     props.updateCard({ content: '' });
     setIsChangeContent(false);
-    clear();
+    setContent('');
   }
 
   const renderContent = () => {
@@ -42,7 +41,7 @@ const Content = (props: ContentProps) => {
 
     return (
       <CreateComment>
-        <Input {...bindContent} />
+        <Input value={content} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)} />
         <Button isColor={true} onClick={updateCard}>Сохранить</Button>
         <Button onClick={exitChange}>&#10006;</Button>
       </CreateComment>

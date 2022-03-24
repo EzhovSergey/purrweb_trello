@@ -12,7 +12,7 @@ const Input = (props: InputProps) => {
 
 export default Input;
 
-type InputProps = React.HTMLAttributes<HTMLInputElement> & {
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   isTransparent?: boolean;
 }
 

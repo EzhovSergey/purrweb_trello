@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Normalize } from 'styled-normalize';
 import { Column as ColumnType, User } from './types';
 import { Column, CreateColumn, Header } from './components';
-import { useInput } from './hooks';
 import { store } from './store';
 import { Button, Input, Modal } from './ui';
 
@@ -11,16 +10,16 @@ function App() {
   const [columns, setColumns] = useState<ColumnType[]>([]);
   const [user, setUser] = useState<User>();
   const [isOpen, setIsOpen] = useState(false);
-  const { bind, value, clear } = useInput();
+  const [userName, setUserName] = useState('');
 
   const createUser = () => {
-    if (!value) {
+    if (!userName) {
       return;
     }
-    const user = store.setUser(value);
+    const user = store.setUser(userName);
     setUser(user);
     setIsOpen(false);
-    clear();
+    setUserName('');
   }
 
   const deleteUser = () => {
@@ -66,6 +65,10 @@ function App() {
     fetchUser();
   }, [])
 
+  useEffect(() => {
+    setUserName('')
+  }, [isOpen])
+
   const renderColumns = () => {
     if (!columns) {
       return <></>
@@ -93,7 +96,10 @@ function App() {
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
           <SFormAuth>
             <SFormTitle>Введите свое имя</SFormTitle>
-            <Input {...bind} />
+            <Input
+              value={userName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
+            />
             <Button isColor={true} onClick={createUser} >Войти</Button>
           </SFormAuth>
         </Modal>
