@@ -2,18 +2,18 @@ import React, { ReactChild } from "react";
 import styled from "styled-components";
 import { Button } from "..";
 
-const Modal = (props: ModalProps) => {
-  return props.isOpen
+const Modal = ({ isOpen, setIsOpen, children }: ModalProps) => {
+  return isOpen
     ?
     <Root
-      onClick={() => props.setIsOpen(false)}
+      onClick={() => setIsOpen(false)}
     >
       <ModalWindow
         onClick={event => event.stopPropagation()}
       >
-        <Button onClick={() => props.setIsOpen(false)}>&#10006;</Button>
+        <Button onClick={() => setIsOpen(false)}>&#10006;</Button>
         <Content>
-          {props.children}
+          {children}
         </Content>
       </ModalWindow>
     </Root>

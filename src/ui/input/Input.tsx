@@ -20,8 +20,8 @@ const Root = styled.input`
   border: none;
   outline: none;
   
-  background-color: ${props => props.theme.isTransparent ? 'rgba(0, 0, 0, 0)' : null};
-  border: ${props => props.theme.isTransparent ? 'solid 2px transparent' : 'solid 2px #1E90FF'};
+  background-color: ${({ theme: { isTransparent } }) => isTransparent ? 'rgba(0, 0, 0, 0)' : null};
+  border: ${({ theme: { isTransparent } }) => isTransparent ? 'solid 2px transparent' : 'solid 2px #1E90FF'};
 
   :hover, :focus {
     border: solid 2px #1E90FF;

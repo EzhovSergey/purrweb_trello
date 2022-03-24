@@ -3,25 +3,28 @@ import styled from "styled-components";
 import { Card } from '../../types';
 import { Header, Content, Comments } from './components';
 
-const CardOpen = (props: CardOpenProps) => {
-  const updateCard = (updateCard: { name?: string, content?: string }) => {
-    props.updateCard(props.card.id, updateCard.name, updateCard.content);
+const CardOpen = ({
+  card,
+  updateCard,
+  changeCountComments
+}: CardOpenProps) => {
+  const handleUpdateCard = (dataUpdateCard: { name?: string, content?: string }) => {
+    updateCard(card.id, dataUpdateCard.name, dataUpdateCard.content);
   }
 
   return (
     <Root>
       <Header
-        card={props.card}
-        closeCard={props.closeCard}
-        updateCard={updateCard}
+        card={card}
+        updateCard={handleUpdateCard}
       />
       <Content
-        content={props.card.content}
-        updateCard={updateCard}
+        content={card.content}
+        updateCard={handleUpdateCard}
       />
       <Comments
-        cardId={props.card.id}
-        changeCountComments={props.changeCountComments}
+        cardId={card.id}
+        changeCountComments={changeCountComments}
       />
     </Root>
   )
@@ -31,9 +34,7 @@ export default CardOpen;
 
 type CardOpenProps = {
   card: Card;
-  closeCard: () => void;
   updateCard: (id: string, name?: string, content?: string) => void;
-  deleteCard: (id: string) => void;
   changeCountComments: (count: number) => void;
 }
 

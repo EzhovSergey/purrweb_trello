@@ -4,8 +4,8 @@ import { Card } from '../../../../types';
 import { store } from '../../../../store';
 import { Input } from '../../../../ui';
 
-const Header = (props: HeaderProps) => {
-  const [columnName, setColumnName] = useState(props.card.name)
+const Header = ({ card, updateCard }: HeaderProps) => {
+  const [columnName, setColumnName] = useState(card.name)
 
   return (
     <Root>
@@ -13,11 +13,11 @@ const Header = (props: HeaderProps) => {
         value={columnName}
         isTransparent={true}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setColumnName(e.target.value)}
-        onBlur={() => props.updateCard({ name: columnName })}
+        onBlur={() => updateCard({ name: columnName })}
       />
       <Info>
-        в колонке <u>{store.getColumnOne(props.card.columnId).name}</u>&nbsp;
-        автор колонки <u>{props.card.authorName}</u>
+        в колонке <u>{store.getColumnOne(card.columnId).name}</u>&nbsp;
+        автор колонки <u>{card.authorName}</u>
       </Info>
     </Root>
   )
@@ -27,7 +27,6 @@ export default Header;
 
 type HeaderProps = {
   card: Card;
-  closeCard: () => void;
   updateCard: (updateCard: { name?: string, content?: string }) => void;
 }
 

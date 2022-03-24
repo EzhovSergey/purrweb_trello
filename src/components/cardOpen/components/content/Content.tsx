@@ -2,38 +2,38 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import { Button, Input } from '../../../../ui';
 
-const Content = (props: ContentProps) => {
+const Content = ({ content, updateCard }: ContentProps) => {
   const [isChangeContent, setIsChangeContent] = useState(false);
-  const [content, setContent] = useState(props.content);
+  const [contentValue, setContentValue] = useState(content);
 
   const exitChange = () => {
     setIsChangeContent(false);
-    setContent('');
+    setContentValue('');
   }
 
-  const updateCard = () => {
-    props.updateCard({ content: content });
+  const handleUpdateCard = () => {
+    updateCard({ content: contentValue });
     setIsChangeContent(false);
   }
 
   const deleteContent = () => {
-    props.updateCard({ content: '' });
+    updateCard({ content: '' });
     setIsChangeContent(false);
-    setContent('');
+    setContentValue('');
   }
 
   const renderContent = () => {
-    if (props.content && !isChangeContent) {
+    if (content && !isChangeContent) {
       return (
         <UpdateContent>
-          <p>{props.content}</p>
+          <p>{content}</p>
           <Button onClick={() => setIsChangeContent(true)}>Изменить</Button>
           <Button onClick={deleteContent}>Удалить</Button>
         </UpdateContent>
       )
     }
 
-    if (!props.content && !isChangeContent) {
+    if (!content && !isChangeContent) {
       return (
         <Button isColor={true} onClick={() => setIsChangeContent(true)}>Добавить</Button>
       )
@@ -41,8 +41,8 @@ const Content = (props: ContentProps) => {
 
     return (
       <CreateComment>
-        <Input value={content} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)} />
-        <Button isColor={true} onClick={updateCard}>Сохранить</Button>
+        <Input value={contentValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentValue(e.target.value)} />
+        <Button isColor={true} onClick={handleUpdateCard}>Сохранить</Button>
         <Button onClick={exitChange}>&#10006;</Button>
       </CreateComment>
     )

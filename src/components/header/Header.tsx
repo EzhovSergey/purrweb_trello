@@ -3,22 +3,22 @@ import styled from "styled-components";
 import { User } from "../../types";
 import { Button } from "../../ui";
 
-const Header = (props: HeaderProps) => {
+const Header = ({ user, isSignIn, deleteUser }: HeaderProps) => {
   return (
     <Root>
       {
-        props.user
+        user
           ?
           <>
             <UserName>
-              {props.user.name}
+              {user.name}
             </UserName>
-            <Button isColor={true} onClick={() => props.deleteUser()}>
+            <Button isColor={true} onClick={() => deleteUser()}>
               Выйти
             </Button>
           </>
           :
-          <Button isColor={true} onClick={() => props.isSignIn()}>
+          <Button isColor={true} onClick={() => isSignIn()}>
             Войти
           </Button>
       }
