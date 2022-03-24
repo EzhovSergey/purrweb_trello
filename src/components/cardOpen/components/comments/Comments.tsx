@@ -13,7 +13,7 @@ const Comments = (props: CommentsProps) => {
 
   const createComment = (body: string) => {
     const newComment = store.createComment(props.cardId, body);
-    setComments(comments => [...comments, newComment]);
+    setComments(comments => [newComment, ...comments]);
     props.changeCountComments(1);
     setIsCreateComment(false);
     clear();

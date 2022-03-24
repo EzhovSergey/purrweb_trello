@@ -38,7 +38,7 @@ export const createComment = (
     authorName: user.name,
   };
 
-  const newComments = [...comments, comment];
+  const newComments = [comment, ...comments];
   localStorage.setItem(commentsStoreKey, JSON.stringify(newComments));
   return comment;
 }
