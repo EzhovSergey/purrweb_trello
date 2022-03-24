@@ -30,7 +30,7 @@ type ModalProps = {
 }
 
 const Root = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +45,9 @@ const ModalWindow = styled.div`
   position: relative;
   background-color: #FFF;
   width: 30vw;
+  min-width: 370px;
   height: max-content;
+  max-height: 80%;
   border-radius: 10px;
 
   > Button {

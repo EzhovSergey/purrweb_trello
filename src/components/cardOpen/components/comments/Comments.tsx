@@ -13,7 +13,7 @@ const Comments = (props: CommentsProps) => {
 
   const createComment = (body: string) => {
     const newComment = store.createComment(props.cardId, body);
-    setComments(comments => [...comments, newComment]);
+    setComments(comments => [newComment, ...comments]);
     props.changeCountComments(1);
     setIsCreateComment(false);
     clear();
@@ -85,7 +85,9 @@ const Comments = (props: CommentsProps) => {
     <Root>
       <b>Комметарии</b>
       {renderCreateComment()}
-      {renderComments()}
+      <CommentsHistory>
+        {renderComments()}
+      </CommentsHistory>
     </Root>
   )
 }
@@ -108,4 +110,11 @@ const Root = styled.div`
   > Input {
     margin: 0.6em 0;
   }
+`;
+
+const CommentsHistory = styled.div`
+  max-height: 360px;
+  display: block;
+  overflow: hidden;
+  overflow-y: scroll;
 `;
