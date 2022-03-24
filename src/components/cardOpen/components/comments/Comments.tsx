@@ -85,7 +85,9 @@ const Comments = (props: CommentsProps) => {
     <Root>
       <b>Комметарии</b>
       {renderCreateComment()}
-      {renderComments()}
+      <CommentsHistory>
+        {renderComments()}
+      </CommentsHistory>
     </Root>
   )
 }
@@ -108,4 +110,11 @@ const Root = styled.div`
   > Input {
     margin: 0.6em 0;
   }
+`;
+
+const CommentsHistory = styled.div`
+  max-height: 360px;
+  display: block;
+  overflow: hidden;
+  overflow-y: scroll;
 `;
