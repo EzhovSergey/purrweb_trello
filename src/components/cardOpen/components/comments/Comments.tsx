@@ -4,24 +4,23 @@ import { Comment as CommentType } from '../../../../types';
 import { store } from '../../../../store';
 import { Comment } from './components';
 import { Button, Input } from '../../../../ui';
-import { useInput } from '../../../../hooks';
 
 const Comments = (props: CommentsProps) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isCreateComment, setIsCreateComment] = useState(false);
-  const { bind, value, clear } = useInput();
+  const [comment, setComment] = useState('');
 
   const createComment = (body: string) => {
     const newComment = store.createComment(props.cardId, body);
     setComments(comments => [newComment, ...comments]);
     props.changeCountComments(1);
     setIsCreateComment(false);
-    clear();
+    setComment('');
   }
 
   const exitCreate = () => {
     setIsCreateComment(false);
-    clear();
+    setComment('');
   }
 
   const updateComment = (id: string, body: string) => {
@@ -52,9 +51,9 @@ const Comments = (props: CommentsProps) => {
     if (isCreateComment) {
       return (
         <>
-          <Input {...bind} />
+          <Input value={comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)} />
           <div>
-            <Button isColor={true} onClick={() => createComment(value)}>Сохранить</Button>
+            <Button isColor={true} onClick={() => createComment(comment)}>Сохранить</Button>
             <Button onClick={exitCreate}>&#10006;</Button>
           </div>
         </>

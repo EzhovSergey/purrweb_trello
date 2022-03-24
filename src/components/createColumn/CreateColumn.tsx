@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useInput } from "../../hooks";
 import { Button, Input } from "../../ui";
 
 const CreateColumn = (props: CreateColumnProps) => {
   const [isCreate, setIsCreate] = useState(false);
-  const { bind, value, clear } = useInput();
+  const [name, setName] = useState('');
 
   const createColumn = () => {
-    if (value) {
-      props.createColumn(value);
+    if (name) {
+      props.createColumn(name);
     }
 
     setIsCreate(false);
-    clear();
+    setName('');
   }
+
+  useEffect(() => {
+    setName('')
+  }, [isCreate])
 
   return (
     <Root>
@@ -27,7 +30,8 @@ const CreateColumn = (props: CreateColumnProps) => {
           :
           <>
             <Input
-              {...bind}
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
               placeholder={'Введите заголовок колонки'}
             />
             <Button isColor={true} onClick={() => createColumn()}>Добавить колонку</Button>

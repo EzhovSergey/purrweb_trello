@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useInput } from "../../../../hooks";
 import { Button, Input } from "../../../../ui";
 
 const CreateCard = (props: CreateCardProps) => {
   const [isCreate, setIsCreate] = useState(false);
-  const { bind, value, clear } = useInput();
+  const [name, setName] = useState('');
 
   const createCard = () => {
-    if (value) {
-      props.createCard(value)
+    if (name) {
+      props.createCard(name)
     }
 
     setIsCreate(false)
-    clear();
+    setName('');
   }
+
+  useEffect(() => {
+    setName('')
+  }, [isCreate])
 
   return (
     <Root>
@@ -27,7 +30,8 @@ const CreateCard = (props: CreateCardProps) => {
           :
           <NewCard>
             <Input
-              {...bind}
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
               placeholder={'Введите заголовок для карточки'}
             />
             <Button isColor={true} onClick={() => createCard()}>Добавить карточку</Button>
