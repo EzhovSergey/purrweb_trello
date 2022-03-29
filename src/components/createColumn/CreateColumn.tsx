@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useAppDispatch } from "../../hooks";
+import { createColumn } from "../../store";
 import { Button, Input } from "../../ui";
 
-const CreateColumn = ({ createColumn }: CreateColumnProps) => {
+const CreateColumn = () => {
+  const dispatch = useAppDispatch();
   const [isCreate, setIsCreate] = useState(false);
   const [name, setName] = useState('');
 
   const handleCreateColumn = () => {
     if (name) {
-      createColumn(name);
+      dispatch(createColumn({ name }))
     }
 
     setIsCreate(false);
@@ -43,10 +46,6 @@ const CreateColumn = ({ createColumn }: CreateColumnProps) => {
 }
 
 export default CreateColumn;
-
-type CreateColumnProps = {
-  createColumn: (value: string) => void;
-}
 
 const Root = styled.div`
   box-sizing: border-box;

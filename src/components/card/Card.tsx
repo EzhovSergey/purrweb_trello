@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { Card as CardType } from '../../types';
-import { store } from '../../store';
+import { deleteCard } from '../../store';
 import { Button, Modal } from '../../ui';
 import { CardOpen } from '..';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
-const Card = ({ card, updateCard, deleteCard }: CardProps) => {
-  const [countComments, setCountComments] = useState(store.getCommentsCount(card.id));
+const Card = ({ card }: CardProps) => {
+  const countComments = useAppSelector(state => state.comments).filter(comment => comment.cardId === card.id).length;
+  const dispatch = useAppDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const renderCountComments = () => {
@@ -21,11 +23,7 @@ const Card = ({ card, updateCard, deleteCard }: CardProps) => {
 
   const handleDeleteCard = (e: React.MouseEvent) => {
     e.stopPropagation()
-    deleteCard(card.id)
-  }
-
-  const changeCountComments = (count: number) => {
-    setCountComments(oldCount => oldCount + count)
+    dispatch(deleteCard({ id: card.id }))
   }
 
   return (
@@ -42,8 +40,6 @@ const Card = ({ card, updateCard, deleteCard }: CardProps) => {
       <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
         <CardOpen
           card={card}
-          updateCard={updateCard}
-          changeCountComments={changeCountComments}
         />
       </Modal>
     </>
@@ -54,8 +50,6 @@ export default Card;
 
 type CardProps = {
   card: CardType;
-  updateCard: (id: string, name?: string, content?: string) => void;
-  deleteCard: (id: string) => void;
 }
 
 const Root = styled.section`

@@ -1,0 +1,1 @@
+export { default, createComment, updateComment, deleteComment } from './slice';

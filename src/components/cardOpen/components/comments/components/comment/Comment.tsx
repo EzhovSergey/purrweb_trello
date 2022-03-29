@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useAppDispatch } from "../../../../../../hooks";
+import { deleteComment, updateComment } from "../../../../../../store";
 import { Comment as CommentType } from "../../../../../../types";
 import { Button, Input } from "../../../../../../ui";
 
-const Comment = ({ comment, updateComment, deleteComment }: CommentProps) => {
+const Comment = ({ comment }: CommentProps) => {
+  const dispatch = useAppDispatch();
   const [isUpdate, setIsUpdate] = useState(false);
   const [commentValue, setCommentValue] = useState(comment.body);
 
   const handleUpdateComment = () => {
-    updateComment(comment.id, commentValue);
+    dispatch(updateComment({ id: comment.id, body: commentValue }))
     setIsUpdate(false)
     setCommentValue('');
   }
@@ -31,7 +34,7 @@ const Comment = ({ comment, updateComment, deleteComment }: CommentProps) => {
         <CommentText>{comment.body}</CommentText>
         <Buttons>
           <Button onClick={() => setIsUpdate(true)}>Изменить</Button>
-          <Button onClick={() => deleteComment(comment.id)}>Удалить</Button>
+          <Button onClick={() => dispatch(deleteComment({ id: comment.id }))}>Удалить</Button>
         </Buttons>
       </>
     )
@@ -51,8 +54,6 @@ export default Comment;
 
 type CommentProps = {
   comment: CommentType;
-  updateComment: (id: string, body: string) => void;
-  deleteComment: (id: string) => void;
 }
 
 

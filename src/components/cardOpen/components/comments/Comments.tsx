@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
-import { Comment as CommentType } from '../../../../types';
-import { store } from '../../../../store';
+import { createComment } from '../../../../store';
 import { Comment } from './components';
 import { Button, Input } from '../../../../ui';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
 
-const Comments = ({ cardId, changeCountComments }: CommentsProps) => {
-  const [comments, setComments] = useState<CommentType[]>([]);
+const Comments = ({ cardId }: CommentsProps) => {
+  const comments = useAppSelector(state => state.comments).filter(comment => comment.cardId === cardId);
+  const userName = useAppSelector(state => state.user).name;
+  const dispatch = useAppDispatch();
   const [isCreateComment, setIsCreateComment] = useState(false);
   const [comment, setComment] = useState('');
 
-  const createComment = (body: string) => {
-    const newComment = store.createComment(cardId, body);
-    setComments(comments => [newComment, ...comments]);
-    changeCountComments(1);
-    setIsCreateComment(false);
-    setComment('');
+  const handleCreateComment = () => {
+    if (comment && userName) {
+      dispatch(createComment({ body: comment, cardId, userName }))
+    }
+    exitCreate()
   }
 
   const exitCreate = () => {
@@ -23,37 +24,13 @@ const Comments = ({ cardId, changeCountComments }: CommentsProps) => {
     setComment('');
   }
 
-  const updateComment = (id: string, body: string) => {
-    const newComment = store.updateComment(id, body);
-    setComments(comments => comments.map(comment =>
-      comment.id === id
-        ? newComment
-        : comment
-    ));
-  }
-
-  const deleteComment = (id: string) => {
-    store.deleteComment(id);
-    setComments(comments => comments.filter(comment => comment.id !== id));
-    changeCountComments(-1);
-  }
-
-  const fetchComments = () => {
-    const commentsByStore = store.getCommentsByCardId(cardId)
-    setComments(commentsByStore)
-  }
-
-  useEffect(() => {
-    fetchComments()
-  }, [])
-
   const renderCreateComment = () => {
     if (isCreateComment) {
       return (
         <>
           <Input value={comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)} />
           <div>
-            <Button isColor={true} onClick={() => createComment(comment)}>Сохранить</Button>
+            <Button isColor={true} onClick={() => handleCreateComment()}>Сохранить</Button>
             <Button onClick={exitCreate}>&#10006;</Button>
           </div>
         </>
@@ -74,8 +51,6 @@ const Comments = ({ cardId, changeCountComments }: CommentsProps) => {
       <Comment
         key={comment.id}
         comment={comment}
-        updateComment={updateComment}
-        deleteComment={deleteComment}
       />
     )
   }
@@ -95,7 +70,6 @@ export default Comments;
 
 type CommentsProps = {
   cardId: string;
-  changeCountComments: (count: number) => void;
 }
 
 const Root = styled.div`

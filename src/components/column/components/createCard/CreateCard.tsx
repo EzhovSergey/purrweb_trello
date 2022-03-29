@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { createCard } from "../../../../store";
 import { Button, Input } from "../../../../ui";
 
-const CreateCard = ({ createCard }: CreateCardProps) => {
+const CreateCard = ({ columnId }: CreateCardProps) => {
+  const dispatch = useAppDispatch();
+  const userName = useAppSelector(state => state.user).name;
   const [isCreate, setIsCreate] = useState(false);
   const [name, setName] = useState('');
 
   const handleCreateCard = () => {
-    if (name) {
-      createCard(name)
+    if (name && userName) {
+      dispatch(createCard({ name, columnId, userName }))
     }
-
     setIsCreate(false)
-    setName('');
   }
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const CreateCard = ({ createCard }: CreateCardProps) => {
 export default CreateCard;
 
 type CreateCardProps = {
-  createCard: (name: string) => void;
+  columnId: string;
 }
 
 const Root = styled.div`

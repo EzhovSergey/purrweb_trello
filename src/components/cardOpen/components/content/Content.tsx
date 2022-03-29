@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
+import { useAppDispatch } from '../../../../hooks';
+import { updateCard } from '../../../../store';
+import { Card } from '../../../../types';
 import { Button, Input } from '../../../../ui';
 
-const Content = ({ content, updateCard }: ContentProps) => {
+const Content = ({ content, cardId }: ContentProps) => {
+  const dispatch = useAppDispatch();
   const [isChangeContent, setIsChangeContent] = useState(false);
   const [contentValue, setContentValue] = useState(content);
 
@@ -12,14 +16,13 @@ const Content = ({ content, updateCard }: ContentProps) => {
   }
 
   const handleUpdateCard = () => {
-    updateCard({ content: contentValue });
+    dispatch(updateCard({ id: cardId, content: contentValue }));
     setIsChangeContent(false);
   }
 
   const deleteContent = () => {
-    updateCard({ content: '' });
-    setIsChangeContent(false);
-    setContentValue('');
+    dispatch(updateCard({ id: cardId, content: '' }));
+    exitChange();
   }
 
   const renderContent = () => {
@@ -59,8 +62,8 @@ const Content = ({ content, updateCard }: ContentProps) => {
 export default Content;
 
 type ContentProps = {
-  content?: string;
-  updateCard: (updateCard: { name?: string, content?: string }) => void;
+  content: string;
+  cardId: string;
 }
 
 const Root = styled.div`

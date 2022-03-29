@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { Card } from '../../../../types';
-import { store } from '../../../../store';
+import { updateCard } from '../../../../store';
 import { Input } from '../../../../ui';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
 
-const Header = ({ card, updateCard }: HeaderProps) => {
+const Header = ({ card }: HeaderProps) => {
+  const columnsName = useAppSelector(state => state.columns).find(column => column.id === card.columnId)?.name
+  const dispatch = useAppDispatch();
   const [columnName, setColumnName] = useState(card.name)
 
   return (
@@ -13,10 +16,10 @@ const Header = ({ card, updateCard }: HeaderProps) => {
         value={columnName}
         isTransparent={true}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setColumnName(e.target.value)}
-        onBlur={() => updateCard({ name: columnName })}
+        onBlur={() => dispatch(updateCard({ id: card.id, name: columnName }))}
       />
       <Info>
-        в колонке <u>{store.getColumnOne(card.columnId).name}</u>&nbsp;
+        в колонке <u>{columnsName}</u>&nbsp;
         автор колонки <u>{card.authorName}</u>
       </Info>
     </Root>
@@ -27,7 +30,6 @@ export default Header;
 
 type HeaderProps = {
   card: Card;
-  updateCard: (updateCard: { name?: string, content?: string }) => void;
 }
 
 const Root = styled.header`
