@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Normalize } from 'styled-normalize';
+import { Form, Field } from 'react-final-form';
 import { Column, CreateColumn, Header } from './components';
 import { createUser } from './store';
 import { Button, Input, Modal } from './ui';
@@ -10,19 +11,11 @@ function App() {
   const columns = useAppSelector(state => state.columns);
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [userName, setUserName] = useState('');
 
-  const handleCreateUser = () => {
-    if (!userName) {
-      return;
-    }
-    dispatch(createUser({ name: userName }));
+  const onSubmit = (values: { name: string }) => {
+    dispatch(createUser({ name: values.name }));
     setIsOpen(false);
   }
-
-  useEffect(() => {
-    setUserName('')
-  }, [isOpen])
 
   const renderColumns = () => {
     if (!columns) {
@@ -47,14 +40,27 @@ function App() {
           <CreateColumn />
         </SColumns>
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-          <SFormAuth>
-            <SFormTitle>Введите свое имя</SFormTitle>
-            <Input
-              value={userName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
-            />
-            <Button isColor={true} onClick={handleCreateUser} >Войти</Button>
-          </SFormAuth>
+          <Form
+            onSubmit={onSubmit}
+            render={({ handleSubmit, pristine }) => (
+              <SFormAuth onSubmit={handleSubmit}>
+                <SFormTitle>Введите свое имя</SFormTitle>
+                <Field
+                  name='name'
+                  type='text'
+                >
+                  {({ input }) => (
+                    <Input value={input.value} onChange={input.onChange} />
+                  )}
+                </Field>
+                <Button
+                  type='submit'
+                  disabled={pristine}
+                  isColor={true}
+                >Войти</Button>
+              </SFormAuth>
+            )}
+          />
         </Modal>
       </Body>
     </>
@@ -72,7 +78,7 @@ const SColumns = styled.div`
   margin: 0 5vh;
 `;
 
-const SFormAuth = styled.div`
+const SFormAuth = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;

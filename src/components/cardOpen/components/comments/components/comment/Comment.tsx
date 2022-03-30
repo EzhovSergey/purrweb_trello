@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Field, Form } from "react-final-form";
 import styled from "styled-components";
 import { useAppDispatch } from "../../../../../../hooks";
 import { deleteComment, updateComment } from "../../../../../../store";
@@ -8,24 +9,44 @@ import { Button, Input } from "../../../../../../ui";
 const Comment = ({ comment }: CommentProps) => {
   const dispatch = useAppDispatch();
   const [isUpdate, setIsUpdate] = useState(false);
-  const [commentValue, setCommentValue] = useState(comment.body);
 
-  const handleUpdateComment = () => {
-    dispatch(updateComment({ id: comment.id, body: commentValue }))
+  const onSubmit = (values: { comment: string }) => {
+    dispatch(updateComment({ id: comment.id, body: values.comment }))
     setIsUpdate(false)
-    setCommentValue('');
   }
 
   const renderComment = () => {
     if (isUpdate) {
       return (
-        <>
-          <Input value={commentValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCommentValue(e.target.value)} />
-          <Buttons>
-            <Button isColor={true} onClick={() => handleUpdateComment()}>Сохранить</Button>
-            <Button onClick={() => setIsUpdate(false)}>&#10006;</Button>
-          </Buttons>
-        </>
+        <Form
+          onSubmit={onSubmit}
+          initialValues={{
+            comment: comment.body,
+          }}
+          render={({ handleSubmit, pristine }) => (
+            <FormBody onSubmit={handleSubmit}>
+              <Field
+                name='comment'
+                type='text'
+              >
+                {({ input }) => (
+                  <Input value={input.value} onChange={input.onChange} />
+                )}
+              </Field>
+              <Buttons>
+                <Button
+                  type='submit'
+                  disabled={pristine}
+                  isColor={true}
+                >Сохранить</Button>
+                <Button
+                  type='reset'
+                  onClick={() => setIsUpdate(false)
+                  }>&#10006;</Button>
+              </Buttons>
+            </FormBody>
+          )}
+        />
       )
     }
 
@@ -64,7 +85,19 @@ const Root = styled.div`
 `;
 
 const Buttons = styled.div`
-  
+  margin-top: .3em;
+`;
+
+const FormBody = styled.form`
+  > Input {
+    box-sizing: border-box;
+    margin-top: .5em;
+    width: 100%;
+  }
+
+  > Button {
+    margin: 1em .5em 1em 0;
+  }
 `;
 
 const CommentText = styled.span`

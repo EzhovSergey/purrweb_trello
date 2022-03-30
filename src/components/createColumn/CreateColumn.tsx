@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Field, Form } from "react-final-form";
 import styled from "styled-components";
 import { useAppDispatch } from "../../hooks";
 import { createColumn } from "../../store";
@@ -7,20 +8,11 @@ import { Button, Input } from "../../ui";
 const CreateColumn = () => {
   const dispatch = useAppDispatch();
   const [isCreate, setIsCreate] = useState(false);
-  const [name, setName] = useState('');
 
-  const handleCreateColumn = () => {
-    if (name) {
-      dispatch(createColumn({ name }))
-    }
-
+  const onSubmit = (values: { name: string }) => {
+    dispatch(createColumn({ name: values.name }))
     setIsCreate(false);
-    setName('');
   }
-
-  useEffect(() => {
-    setName('')
-  }, [isCreate])
 
   return (
     <Root>
@@ -31,15 +23,34 @@ const CreateColumn = () => {
             &#10010; Добавить колонку
           </Button>
           :
-          <>
-            <Input
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-              placeholder={'Введите заголовок колонки'}
-            />
-            <Button isColor={true} onClick={() => handleCreateColumn()}>Добавить колонку</Button>
-            <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
-          </>
+          <Form
+            onSubmit={onSubmit}
+            render={({ handleSubmit, pristine }) => (
+              <FormBody onSubmit={handleSubmit}>
+                <Field
+                  name='name'
+                  type='text'
+                >
+                  {({ input }) => (
+                    <Input
+                      value={input.value}
+                      onChange={input.onChange}
+                      placeholder={'Введите заголовок колонки'}
+                    />
+                  )}
+                </Field>
+                <Button
+                  type='submit'
+                  disabled={pristine}
+                  isColor={true}
+                >Добавить колонку</Button>
+                <Button
+                  type='reset'
+                  onClick={() => setIsCreate(false)}
+                >&#10006;</Button>
+              </FormBody>
+            )}
+          />
       }
     </Root>
   )
@@ -55,7 +66,9 @@ const Root = styled.div`
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.07);
   padding: 0.6em;
+`;
 
+const FormBody = styled.form`
   > Input {
     padding: 0.5em;
     box-sizing: border-box;

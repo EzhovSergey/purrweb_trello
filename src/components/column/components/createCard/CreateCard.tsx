@@ -1,4 +1,6 @@
+import { values } from "lodash";
 import React, { useEffect, useState } from "react";
+import { Field, Form } from "react-final-form";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { createCard } from "../../../../store";
@@ -8,18 +10,11 @@ const CreateCard = ({ columnId }: CreateCardProps) => {
   const dispatch = useAppDispatch();
   const userName = useAppSelector(state => state.user).name;
   const [isCreate, setIsCreate] = useState(false);
-  const [name, setName] = useState('');
 
-  const handleCreateCard = () => {
-    if (name && userName) {
-      dispatch(createCard({ name, columnId, userName }))
-    }
+  const onSubmit = (values: { name: string }) => {
+    dispatch(createCard({ name: values.name, columnId, userName }))
     setIsCreate(false)
   }
-
-  useEffect(() => {
-    setName('')
-  }, [isCreate])
 
   return (
     <Root>
@@ -30,15 +25,39 @@ const CreateCard = ({ columnId }: CreateCardProps) => {
             &#10010; Добавить карточку
           </Button>
           :
-          <NewCard>
-            <Input
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-              placeholder={'Введите заголовок для карточки'}
-            />
-            <Button isColor={true} onClick={() => handleCreateCard()}>Добавить карточку</Button>
-            <Button onClick={() => setIsCreate(false)}>&#10006;</Button>
-          </NewCard>
+          <Form
+            onSubmit={onSubmit}
+            validate={() => {
+              if (!userName) {
+                return { user: 'Пользователь не авторизован' };
+              }
+            }}
+            render={({ handleSubmit, pristine, valid }) => (
+              <FormBody onSubmit={handleSubmit}>
+                <Field
+                  name='name'
+                  type='text'
+                >
+                  {({ input }) => (
+                    <Input
+                      value={input.value}
+                      onChange={input.onChange}
+                      placeholder={'Введите заголовок для карточки'}
+                    />
+                  )}
+                </Field>
+                <Button
+                  type='submit'
+                  disabled={pristine || !valid}
+                  isColor={true}
+                >Добавить карточку</Button>
+                <Button
+                  type='reset'
+                  onClick={() => setIsCreate(false)}
+                >&#10006;</Button>
+              </FormBody>
+            )}
+          />
       }
     </Root>
   )
@@ -54,8 +73,7 @@ const Root = styled.div`
   width: 260px;
 `;
 
-const NewCard = styled.div`
-
+const FormBody = styled.form`
   > Input {
     width: 100%;
     padding: 0.5em;

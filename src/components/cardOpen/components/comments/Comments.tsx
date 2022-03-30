@@ -4,36 +4,53 @@ import { createComment } from '../../../../store';
 import { Comment } from './components';
 import { Button, Input } from '../../../../ui';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { Field, Form } from 'react-final-form';
 
 const Comments = ({ cardId }: CommentsProps) => {
   const comments = useAppSelector(state => state.comments).filter(comment => comment.cardId === cardId);
   const userName = useAppSelector(state => state.user).name;
   const dispatch = useAppDispatch();
   const [isCreateComment, setIsCreateComment] = useState(false);
-  const [comment, setComment] = useState('');
 
-  const handleCreateComment = () => {
-    if (comment && userName) {
-      dispatch(createComment({ body: comment, cardId, userName }))
-    }
-    exitCreate()
-  }
-
-  const exitCreate = () => {
+  const onSubmit = (value: { comment: string }) => {
+    dispatch(createComment({ body: value.comment, cardId, userName }))
     setIsCreateComment(false);
-    setComment('');
   }
 
   const renderCreateComment = () => {
     if (isCreateComment) {
       return (
-        <>
-          <Input value={comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)} />
-          <div>
-            <Button isColor={true} onClick={() => handleCreateComment()}>Сохранить</Button>
-            <Button onClick={exitCreate}>&#10006;</Button>
-          </div>
-        </>
+        <Form
+          onSubmit={onSubmit}
+          validate={() => {
+            if (!userName) {
+              return { user: 'Пользователь не авторизован' };
+            }
+          }}
+          render={({ handleSubmit, pristine, valid }) => (
+            <FormBody onSubmit={handleSubmit}>
+              <Field
+                name='comment'
+                type='text'
+              >
+                {({ input }) => (
+                  <Input value={input.value} onChange={input.onChange} />
+                )}
+              </Field>
+              <Buttons>
+                <Button
+                  type='submit'
+                  disabled={pristine || !valid}
+                  isColor={true}
+                >Сохранить</Button>
+                <Button
+                  type='reset'
+                  onClick={() => setIsCreateComment(false)
+                  }>&#10006;</Button>
+              </Buttons>
+            </FormBody>
+          )}
+        />
       )
     }
 
@@ -76,13 +93,21 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
 
-  > Button {
+  Button {
     width: 100px;
   }
+`;
 
+const FormBody = styled.form`
   > Input {
+    box-sizing: border-box;
     margin: 0.6em 0;
+    width: 100%;
   }
+`;
+
+const Buttons = styled.div`
+  margin-top: .2em;
 `;
 
 const CommentsHistory = styled.div`

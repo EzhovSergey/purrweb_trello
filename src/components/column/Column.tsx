@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { Column as ColumnType } from '../../types';
 import { Card } from '..';
@@ -6,11 +6,15 @@ import { CreateCard } from './components'
 import { Button, Input } from '../../ui';
 import { deleteColumn, updateColumn } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { Field, Form } from 'react-final-form';
 
 const Column = ({ column }: ColumnProps) => {
   const cards = useAppSelector(state => state.cards).filter(card => card.columnId === column.id);
   const dispatch = useAppDispatch();
-  const [name, setName] = useState(column.name);
+
+  const onSubmit = (values: { name: string }) => {
+    dispatch(updateColumn({ id: column.id, name: values.name }))
+  }
 
   const renderCards = () => {
     if (!cards) {
@@ -28,11 +32,26 @@ const Column = ({ column }: ColumnProps) => {
   return (
     <Root>
       <Title>
-        <Input
-          value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-          onBlur={() => dispatch(updateColumn({ id: column.id, name }))}
-          isTransparent={true}
+        <Form
+          onSubmit={onSubmit}
+          initialValues={{
+            name: column.name
+          }}
+          render={({ handleSubmit }) => (
+            <Field
+              name='name'
+              type='text'
+            >
+              {({ input }) => (
+                <Input
+                  value={input.value}
+                  onChange={input.onChange}
+                  onBlur={handleSubmit}
+                  isTransparent={true}
+                />
+              )}
+            </Field>
+          )}
         />
         <Button onClick={() => dispatch(deleteColumn({ id: column.id }))}>&#10006;</Button>
       </Title>

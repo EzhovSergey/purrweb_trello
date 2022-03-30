@@ -4,19 +4,38 @@ import { Card } from '../../../../types';
 import { updateCard } from '../../../../store';
 import { Input } from '../../../../ui';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { Field, Form } from 'react-final-form';
 
 const Header = ({ card }: HeaderProps) => {
   const columnsName = useAppSelector(state => state.columns).find(column => column.id === card.columnId)?.name
   const dispatch = useAppDispatch();
-  const [columnName, setColumnName] = useState(card.name)
+
+  const onSubmit = (values: { name: string }) => {
+    dispatch(updateCard({ id: card.id, name: values.name }))
+  }
 
   return (
     <Root>
-      <Input
-        value={columnName}
-        isTransparent={true}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setColumnName(e.target.value)}
-        onBlur={() => dispatch(updateCard({ id: card.id, name: columnName }))}
+      <Form
+        onSubmit={onSubmit}
+        initialValues={{
+          name: card.name
+        }}
+        render={({ handleSubmit }) => (
+          <Field
+            name='name'
+            type='text'
+          >
+            {({ input }) => (
+              <Input
+                value={input.value}
+                onChange={input.onChange}
+                onBlur={handleSubmit}
+                isTransparent={true}
+              />
+            )}
+          </Field>
+        )}
       />
       <Info>
         в колонке <u>{columnsName}</u>&nbsp;
