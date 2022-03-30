@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { Card } from '../../types';
+import { Card } from 'types';
 import { Header, Content, Comments } from './components';
 
 const CardOpen = ({ card }: CardOpenProps) => {

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Field, Form } from "react-final-form";
 import styled from "styled-components";
-import { useAppDispatch } from "../../../../../../hooks";
-import { deleteComment, updateComment } from "../../../../../../store";
-import { Comment as CommentType } from "../../../../../../types";
-import { Button, Input } from "../../../../../../ui";
+import { useAppDispatch } from "hooks";
+import { actions } from "store";
+import { Comment as CommentType } from "types";
+import { Button, Input } from "ui";
 
 const Comment = ({ comment }: CommentProps) => {
   const dispatch = useAppDispatch();
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const onSubmit = (values: { comment: string }) => {
-    dispatch(updateComment({ id: comment.id, body: values.comment }))
+  const handleSubmit = (values: { comment: string }) => {
+    dispatch(actions.comments.updateComment({ id: comment.id, body: values.comment }))
     setIsUpdate(false)
   }
 
@@ -19,7 +19,7 @@ const Comment = ({ comment }: CommentProps) => {
     if (isUpdate) {
       return (
         <Form
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           initialValues={{
             comment: comment.body,
           }}
@@ -27,12 +27,8 @@ const Comment = ({ comment }: CommentProps) => {
             <FormBody onSubmit={handleSubmit}>
               <Field
                 name='comment'
-                type='text'
-              >
-                {({ input }) => (
-                  <Input value={input.value} onChange={input.onChange} />
-                )}
-              </Field>
+                component={Input}
+              />
               <Buttons>
                 <Button
                   type='submit'
@@ -55,7 +51,7 @@ const Comment = ({ comment }: CommentProps) => {
         <CommentText>{comment.body}</CommentText>
         <Buttons>
           <Button onClick={() => setIsUpdate(true)}>Изменить</Button>
-          <Button onClick={() => dispatch(deleteComment({ id: comment.id }))}>Удалить</Button>
+          <Button onClick={() => dispatch(actions.comments.deleteComment({ id: comment.id }))}>Удалить</Button>
         </Buttons>
       </>
     )

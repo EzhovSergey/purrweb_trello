@@ -1,1 +1,2 @@
-export { default, createColumn, updateColumn, deleteColumn } from './slice';
+export { default, columnsActions } from './slice';
+export * as columnsSelectors from './selectors';

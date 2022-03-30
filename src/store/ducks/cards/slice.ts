@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import uniqid from 'uniqid';
-import { Card } from '../../../types';
-import { deleteColumn } from '..';
+import { columnsActions } from '../columns';
+import { Card } from 'types';
 
 const initialState: Card[] = [];
 
-export const cardsSlice = createSlice({
+const cardsSlice = createSlice({
   name: 'cards',
   initialState,
   reducers: {
@@ -36,12 +36,12 @@ export const cardsSlice = createSlice({
     }
   },
   extraReducers: {
-    [deleteColumn.type]: (state, action: PayloadAction<{ id: string }>) => {
+    [columnsActions.deleteColumn.type]: (state, action: PayloadAction<{ id: string }>) => {
       return state.filter(card => card.columnId === action.payload.id)
     }
   }
 })
 
-export const { createCard, updateCard, deleteCard } = cardsSlice.actions
+export const cardsActions = cardsSlice.actions
 
 export default cardsSlice.reducer

@@ -1,19 +1,19 @@
 import React from 'react';
 import styled from "styled-components";
-import { Column as ColumnType } from '../../types';
+import { Column as ColumnType } from 'types';
 import { Card } from '..';
 import { CreateCard } from './components'
-import { Button, Input } from '../../ui';
-import { deleteColumn, updateColumn } from '../../store';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { Button, Input } from 'ui';
+import { actions, selectors } from 'store';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { Field, Form } from 'react-final-form';
 
 const Column = ({ column }: ColumnProps) => {
-  const cards = useAppSelector(state => state.cards).filter(card => card.columnId === column.id);
+  const cards = useAppSelector(selectors.cards.all(column.id));
   const dispatch = useAppDispatch();
 
-  const onSubmit = (values: { name: string }) => {
-    dispatch(updateColumn({ id: column.id, name: values.name }))
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.columns.updateColumn({ id: column.id, name: values.name }))
   }
 
   const renderCards = () => {
@@ -33,27 +33,20 @@ const Column = ({ column }: ColumnProps) => {
     <Root>
       <Title>
         <Form
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           initialValues={{
             name: column.name
           }}
           render={({ handleSubmit }) => (
             <Field
               name='name'
-              type='text'
-            >
-              {({ input }) => (
-                <Input
-                  value={input.value}
-                  onChange={input.onChange}
-                  onBlur={handleSubmit}
-                  isTransparent={true}
-                />
-              )}
-            </Field>
+              component={Input}
+              onBlur={handleSubmit}
+              isTransparent={true}
+            />
           )}
         />
-        <Button onClick={() => dispatch(deleteColumn({ id: column.id }))}>&#10006;</Button>
+        <Button onClick={() => dispatch(actions.columns.deleteColumn({ id: column.id }))}>&#10006;</Button>
       </Title>
       {renderCards()}
       <CreateCard columnId={column.id} />

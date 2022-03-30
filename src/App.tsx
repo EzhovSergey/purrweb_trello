@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { Normalize } from 'styled-normalize';
 import { Form, Field } from 'react-final-form';
 import { Column, CreateColumn, Header } from './components';
-import { createUser } from './store';
+import { actions, selectors } from './store';
 import { Button, Input, Modal } from './ui';
 import { useAppDispatch, useAppSelector } from './hooks';
 
 function App() {
-  const columns = useAppSelector(state => state.columns);
+  const columns = useAppSelector(selectors.columns.all);
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onSubmit = (values: { name: string }) => {
-    dispatch(createUser({ name: values.name }));
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.user.createUser({ name: values.name }));
     setIsOpen(false);
   }
 
@@ -41,18 +41,14 @@ function App() {
         </SColumns>
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
           <Form
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             render={({ handleSubmit, pristine }) => (
               <SFormAuth onSubmit={handleSubmit}>
                 <SFormTitle>Введите свое имя</SFormTitle>
                 <Field
                   name='name'
-                  type='text'
-                >
-                  {({ input }) => (
-                    <Input value={input.value} onChange={input.onChange} />
-                  )}
-                </Field>
+                  component={Input}
+                />
                 <Button
                   type='submit'
                   disabled={pristine}

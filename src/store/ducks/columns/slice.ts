@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import uniqid from 'uniqid';
-import { Column } from '../../../types';
+import { Column } from 'types';
 
 const initialState: Column[] = [
   {
@@ -21,7 +21,7 @@ const initialState: Column[] = [
   }
 ]
 
-export const columnsSlice = createSlice({
+const columnsSlice = createSlice({
   name: 'columns',
   initialState,
   reducers: {
@@ -50,6 +50,6 @@ export const columnsSlice = createSlice({
   },
 })
 
-export const { createColumn, updateColumn, deleteColumn } = columnsSlice.actions
+export const columnsActions = columnsSlice.actions
 
 export default columnsSlice.reducer

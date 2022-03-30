@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import uniqid from 'uniqid';
-import { User } from '../../../types';
+import { User } from 'types';
 
 const initialState = {} as User;
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -21,6 +21,6 @@ export const userSlice = createSlice({
   },
 })
 
-export const { createUser, deleteUser } = userSlice.actions
+export const userActions = userSlice.actions
 
 export default userSlice.reducer

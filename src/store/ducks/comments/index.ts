@@ -1,1 +1,2 @@
-export { default, createComment, updateComment, deleteComment } from './slice';
+export { default, commentsActions } from './slice';
+export * as commentsSelectors from './selectors';

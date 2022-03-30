@@ -1,24 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import { isEmpty } from 'lodash';
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { Button } from "../../ui";
-import { deleteUser } from "../../store";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { Button } from "ui";
+import { actions, selectors } from "store";
 
 const Header = ({ setIsOpen }: HeaderProps) => {
-  const user = useAppSelector(state => state.user);
+  const userName = useAppSelector(selectors.user.name);
   const dispatch = useAppDispatch();
 
   return (
     <Root>
       {
-        !isEmpty(user)
+        userName
           ?
           <>
             <UserName>
-              {user.name}
+              {userName}
             </UserName>
-            <Button isColor={true} onClick={() => dispatch(deleteUser())}>
+            <Button isColor={true} onClick={() => dispatch(actions.user.deleteUser())}>
               Выйти
             </Button>
           </>

@@ -1,42 +1,40 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
-import { createComment } from '../../../../store';
+import { actions, selectors } from 'store';
 import { Comment } from './components';
-import { Button, Input } from '../../../../ui';
-import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { Button, Input } from 'ui';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { Field, Form } from 'react-final-form';
 
 const Comments = ({ cardId }: CommentsProps) => {
-  const comments = useAppSelector(state => state.comments).filter(comment => comment.cardId === cardId);
-  const userName = useAppSelector(state => state.user).name;
+  const comments = useAppSelector(selectors.comments.all(cardId));
+  const userName = useAppSelector(selectors.user.name);
   const dispatch = useAppDispatch();
   const [isCreateComment, setIsCreateComment] = useState(false);
 
-  const onSubmit = (value: { comment: string }) => {
-    dispatch(createComment({ body: value.comment, cardId, userName }))
+  const handleSubmit = (value: { comment: string }) => {
+    dispatch(actions.comments.createComment({ body: value.comment, cardId, userName }))
     setIsCreateComment(false);
+  }
+
+  const handleValidate = () => {
+    if (!userName) {
+      return { user: 'Пользователь не авторизован' };
+    }
   }
 
   const renderCreateComment = () => {
     if (isCreateComment) {
       return (
         <Form
-          onSubmit={onSubmit}
-          validate={() => {
-            if (!userName) {
-              return { user: 'Пользователь не авторизован' };
-            }
-          }}
+          onSubmit={handleSubmit}
+          validate={handleValidate}
           render={({ handleSubmit, pristine, valid }) => (
             <FormBody onSubmit={handleSubmit}>
               <Field
                 name='comment'
-                type='text'
-              >
-                {({ input }) => (
-                  <Input value={input.value} onChange={input.onChange} />
-                )}
-              </Field>
+                component={Input}
+              />
               <Buttons>
                 <Button
                   type='submit'

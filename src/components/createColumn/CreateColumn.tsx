@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Field, Form } from "react-final-form";
 import styled from "styled-components";
-import { useAppDispatch } from "../../hooks";
-import { createColumn } from "../../store";
-import { Button, Input } from "../../ui";
+import { useAppDispatch } from "hooks";
+import { actions } from "store";
+import { Button, Input } from "ui";
 
 const CreateColumn = () => {
   const dispatch = useAppDispatch();
   const [isCreate, setIsCreate] = useState(false);
 
-  const onSubmit = (values: { name: string }) => {
-    dispatch(createColumn({ name: values.name }))
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.columns.createColumn({ name: values.name }))
     setIsCreate(false);
   }
 
@@ -24,21 +24,15 @@ const CreateColumn = () => {
           </Button>
           :
           <Form
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             render={({ handleSubmit, pristine }) => (
               <FormBody onSubmit={handleSubmit}>
                 <Field
                   name='name'
                   type='text'
-                >
-                  {({ input }) => (
-                    <Input
-                      value={input.value}
-                      onChange={input.onChange}
-                      placeholder={'Введите заголовок колонки'}
-                    />
-                  )}
-                </Field>
+                  placeholder={'Введите заголовок колонки'}
+                  component={Input}
+                />
                 <Button
                   type='submit'
                   disabled={pristine}

@@ -1,1 +1,2 @@
-export { default, createCard, updateCard, deleteCard } from './slice';
+export { default, cardsActions } from './slice';
+export * as cardsSelectors from './selectors';

@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import {
   persistStore,
   persistReducer,
@@ -10,15 +10,7 @@ import {
   REGISTER,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-
-import { columnsSlice, cardsSlice, commentsSlice, userSlice } from './ducks';
-
-const rootReducer = combineReducers({
-  columns: columnsSlice,
-  cards: cardsSlice,
-  comments: commentsSlice,
-  user: userSlice
-});
+import rootReducer from './ducks'
 
 const persistConfig = {
   key: 'root',
@@ -40,7 +32,7 @@ const store = configureStore({
 export const persistor = persistStore(store);
 export default store;
 
-export * from './ducks';
+export { actions, selectors } from './ducks';
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

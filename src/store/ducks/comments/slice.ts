@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import uniqid from 'uniqid';
-import { Comment } from '../../../types';
-import { deleteCard } from '..';
+import { cardsActions } from '../cards';
+import { Comment } from 'types';
 
 const initialState: Comment[] = [];
 
-export const commentsSlice = createSlice({
+const commentsSlice = createSlice({
   name: 'comments',
   initialState,
   reducers: {
@@ -35,12 +35,12 @@ export const commentsSlice = createSlice({
     }
   },
   extraReducers: {
-    [deleteCard.type]: (state, action: PayloadAction<{ id: string }>) => {
+    [cardsActions.deleteCard.type]: (state, action: PayloadAction<{ id: string }>) => {
       return state.filter(card => card.cardId !== action.payload.id)
     }
   }
 })
 
-export const { createComment, updateComment, deleteComment } = commentsSlice.actions
+export const commentsActions = commentsSlice.actions
 
 export default commentsSlice.reducer

@@ -1,40 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
-import { Card } from '../../../../types';
-import { updateCard } from '../../../../store';
-import { Input } from '../../../../ui';
-import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { Card } from 'types';
+import { actions, selectors } from 'store';
+import { Input } from 'ui';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { Field, Form } from 'react-final-form';
 
 const Header = ({ card }: HeaderProps) => {
-  const columnsName = useAppSelector(state => state.columns).find(column => column.id === card.columnId)?.name
+  const columnsName = useAppSelector(selectors.columns.name(card.columnId))
   const dispatch = useAppDispatch();
 
-  const onSubmit = (values: { name: string }) => {
-    dispatch(updateCard({ id: card.id, name: values.name }))
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.cards.updateCard({ id: card.id, name: values.name }))
   }
 
   return (
     <Root>
       <Form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         initialValues={{
           name: card.name
         }}
         render={({ handleSubmit }) => (
           <Field
             name='name'
-            type='text'
-          >
-            {({ input }) => (
-              <Input
-                value={input.value}
-                onChange={input.onChange}
-                onBlur={handleSubmit}
-                isTransparent={true}
-              />
-            )}
-          </Field>
+            component={Input}
+            onBlur={handleSubmit}
+            isTransparent={true}
+          />
         )}
       />
       <Info>

@@ -1,18 +1,17 @@
-import { values } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Field, Form } from "react-final-form";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { createCard } from "../../../../store";
-import { Button, Input } from "../../../../ui";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { actions, selectors } from "store";
+import { Button, Input } from "ui";
 
 const CreateCard = ({ columnId }: CreateCardProps) => {
   const dispatch = useAppDispatch();
-  const userName = useAppSelector(state => state.user).name;
+  const userName = useAppSelector(selectors.user.name);
   const [isCreate, setIsCreate] = useState(false);
 
-  const onSubmit = (values: { name: string }) => {
-    dispatch(createCard({ name: values.name, columnId, userName }))
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.cards.createCard({ name: values.name, columnId, userName }))
     setIsCreate(false)
   }
 
@@ -26,7 +25,7 @@ const CreateCard = ({ columnId }: CreateCardProps) => {
           </Button>
           :
           <Form
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             validate={() => {
               if (!userName) {
                 return { user: 'Пользователь не авторизован' };
@@ -37,15 +36,9 @@ const CreateCard = ({ columnId }: CreateCardProps) => {
                 <Field
                   name='name'
                   type='text'
-                >
-                  {({ input }) => (
-                    <Input
-                      value={input.value}
-                      onChange={input.onChange}
-                      placeholder={'Введите заголовок для карточки'}
-                    />
-                  )}
-                </Field>
+                  placeholder={'Введите заголовок для карточки'}
+                  component={Input}
+                />
                 <Button
                   type='submit'
                   disabled={pristine || !valid}

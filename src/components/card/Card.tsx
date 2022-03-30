@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
-import { Card as CardType } from '../../types';
-import { deleteCard } from '../../store';
-import { Button, Modal } from '../../ui';
-import { CardOpen } from '..';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { Card as CardType } from 'types';
+import { actions, selectors } from 'store';
+import { Button, Modal } from 'ui';
+import { CardOpen } from 'components';
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 const Card = ({ card }: CardProps) => {
-  const countComments = useAppSelector(state => state.comments).filter(comment => comment.cardId === card.id).length;
+  const countComments = useAppSelector(selectors.comments.count(card.id));
   const dispatch = useAppDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
 
@@ -23,7 +23,7 @@ const Card = ({ card }: CardProps) => {
 
   const handleDeleteCard = (e: React.MouseEvent) => {
     e.stopPropagation()
-    dispatch(deleteCard({ id: card.id }))
+    dispatch(actions.cards.deleteCard({ id: card.id }))
   }
 
   return (
