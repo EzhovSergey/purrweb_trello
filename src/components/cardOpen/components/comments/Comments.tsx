@@ -1,62 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
-import { Comment as CommentType } from '../../../../types';
-import { store } from '../../../../store';
+import { actions, selectors } from 'store';
 import { Comment } from './components';
-import { Button, Input } from '../../../../ui';
+import { Button, Input } from 'ui';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { Field, Form } from 'react-final-form';
 
-const Comments = ({ cardId, changeCountComments }: CommentsProps) => {
-  const [comments, setComments] = useState<CommentType[]>([]);
+const Comments = ({ cardId }: CommentsProps) => {
+  const comments = useAppSelector(selectors.comments.selectByCardId(cardId));
+  const userName = useAppSelector(selectors.user.selectName);
+  const dispatch = useAppDispatch();
   const [isCreateComment, setIsCreateComment] = useState(false);
-  const [comment, setComment] = useState('');
 
-  const createComment = (body: string) => {
-    const newComment = store.createComment(cardId, body);
-    setComments(comments => [newComment, ...comments]);
-    changeCountComments(1);
+  const handleSubmit = (value: { comment: string }) => {
+    dispatch(actions.comments.createComment({ body: value.comment, cardId, userName }))
     setIsCreateComment(false);
-    setComment('');
   }
 
-  const exitCreate = () => {
-    setIsCreateComment(false);
-    setComment('');
+  const handleValidate = () => {
+    if (!userName) {
+      return { user: 'Пользователь не авторизован' };
+    }
   }
-
-  const updateComment = (id: string, body: string) => {
-    const newComment = store.updateComment(id, body);
-    setComments(comments => comments.map(comment =>
-      comment.id === id
-        ? newComment
-        : comment
-    ));
-  }
-
-  const deleteComment = (id: string) => {
-    store.deleteComment(id);
-    setComments(comments => comments.filter(comment => comment.id !== id));
-    changeCountComments(-1);
-  }
-
-  const fetchComments = () => {
-    const commentsByStore = store.getCommentsByCardId(cardId)
-    setComments(commentsByStore)
-  }
-
-  useEffect(() => {
-    fetchComments()
-  }, [])
 
   const renderCreateComment = () => {
     if (isCreateComment) {
       return (
-        <>
-          <Input value={comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)} />
-          <div>
-            <Button isColor={true} onClick={() => createComment(comment)}>Сохранить</Button>
-            <Button onClick={exitCreate}>&#10006;</Button>
-          </div>
-        </>
+        <Form
+          onSubmit={handleSubmit}
+          validate={handleValidate}
+          render={({ handleSubmit, pristine, valid }) => (
+            <FormBody onSubmit={handleSubmit}>
+              <Field
+                name='comment'
+                component={Input}
+              />
+              <Buttons>
+                <Button
+                  type='submit'
+                  disabled={pristine || !valid}
+                  isColor={true}
+                >Сохранить</Button>
+                <Button
+                  type='reset'
+                  onClick={() => setIsCreateComment(false)
+                  }>&#10006;</Button>
+              </Buttons>
+            </FormBody>
+          )}
+        />
       )
     }
 
@@ -74,8 +66,6 @@ const Comments = ({ cardId, changeCountComments }: CommentsProps) => {
       <Comment
         key={comment.id}
         comment={comment}
-        updateComment={updateComment}
-        deleteComment={deleteComment}
       />
     )
   }
@@ -95,20 +85,27 @@ export default Comments;
 
 type CommentsProps = {
   cardId: string;
-  changeCountComments: (count: number) => void;
 }
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
 
-  > Button {
+  Button {
     width: 100px;
   }
+`;
 
+const FormBody = styled.form`
   > Input {
+    box-sizing: border-box;
     margin: 0.6em 0;
+    width: 100%;
   }
+`;
+
+const Buttons = styled.div`
+  margin-top: .2em;
 `;
 
 const CommentsHistory = styled.div`

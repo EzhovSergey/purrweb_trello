@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
+import { Field, Form } from 'react-final-form';
 import styled from "styled-components";
-import { Button, Input } from '../../../../ui';
+import { useAppDispatch } from 'hooks';
+import { actions } from 'store';
+import { Button, Input } from 'ui';
 
-const Content = ({ content, updateCard }: ContentProps) => {
+const Content = ({ content, cardId }: ContentProps) => {
+  const dispatch = useAppDispatch();
   const [isChangeContent, setIsChangeContent] = useState(false);
-  const [contentValue, setContentValue] = useState(content);
 
-  const exitChange = () => {
-    setIsChangeContent(false);
-    setContentValue('');
-  }
-
-  const handleUpdateCard = () => {
-    updateCard({ content: contentValue });
+  const handleSubmit = (values: { content: string }) => {
+    dispatch(actions.cards.updateCard({ id: cardId, content: values.content }));
     setIsChangeContent(false);
   }
 
   const deleteContent = () => {
-    updateCard({ content: '' });
+    dispatch(actions.cards.updateCard({ id: cardId, content: '' }));
     setIsChangeContent(false);
-    setContentValue('');
   }
 
   const renderContent = () => {
@@ -40,11 +37,29 @@ const Content = ({ content, updateCard }: ContentProps) => {
     }
 
     return (
-      <CreateComment>
-        <Input value={contentValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentValue(e.target.value)} />
-        <Button isColor={true} onClick={handleUpdateCard}>Сохранить</Button>
-        <Button onClick={exitChange}>&#10006;</Button>
-      </CreateComment>
+      <Form
+        onSubmit={handleSubmit}
+        initialValues={{
+          content,
+        }}
+        render={({ handleSubmit, pristine }) => (
+          <FormBody onSubmit={handleSubmit}>
+            <Field
+              name='content'
+              component={Input}
+            />
+            <Button
+              type='submit'
+              disabled={pristine}
+              isColor={true}
+            >Сохранить</Button>
+            <Button
+              type='reset'
+              onClick={() => setIsChangeContent(false)
+              }>&#10006;</Button>
+          </FormBody>
+        )}
+      />
     )
   }
 
@@ -59,8 +74,8 @@ const Content = ({ content, updateCard }: ContentProps) => {
 export default Content;
 
 type ContentProps = {
-  content?: string;
-  updateCard: (updateCard: { name?: string, content?: string }) => void;
+  content: string;
+  cardId: string;
 }
 
 const Root = styled.div`
@@ -74,7 +89,7 @@ const Root = styled.div`
 `;
 
 
-const CreateComment = styled.div`
+const FormBody = styled.form`
 
   > Input {
     box-sizing: border-box;

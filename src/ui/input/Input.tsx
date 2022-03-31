@@ -1,9 +1,12 @@
 import React from "react";
+import { FieldRenderProps } from "react-final-form";
 import styled from "styled-components";
 
 const Input = (props: InputProps) => {
   return (
     <Root
+      value={`${props.input.value}`}
+      onChange={props.input.onChange}
       theme={{ ...props }}
       {...props}
     />
@@ -12,7 +15,7 @@ const Input = (props: InputProps) => {
 
 export default Input;
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = FieldRenderProps<HTMLInputElement> & {
   isTransparent?: boolean;
 }
 

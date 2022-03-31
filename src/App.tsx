@@ -1,73 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Normalize } from 'styled-normalize';
-import { Column as ColumnType, User } from './types';
+import { Form, Field } from 'react-final-form';
 import { Column, CreateColumn, Header } from './components';
-import { store } from './store';
+import { actions, selectors } from './store';
 import { Button, Input, Modal } from './ui';
+import { useAppDispatch, useAppSelector } from './hooks';
 
 function App() {
-  const [columns, setColumns] = useState<ColumnType[]>([]);
-  const [user, setUser] = useState<User>();
+  const columns = useAppSelector(selectors.columns.selectAll);
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [userName, setUserName] = useState('');
 
-  const createUser = () => {
-    if (!userName) {
-      return;
-    }
-    const user = store.setUser(userName);
-    setUser(user);
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.user.createUser({ name: values.name }));
     setIsOpen(false);
-    setUserName('');
   }
-
-  const deleteUser = () => {
-    store.deleteUser();
-    setUser(undefined);
-    setIsOpen(true);
-  }
-
-  const createColumn = (name: string) => {
-    const newColumn = store.createColumn(name);
-    setColumns(columns => [...columns, newColumn]);
-  }
-
-  const updateColumn = (id: string, name: string) => {
-    const newColumn = store.updateColumn(id, name);
-    setColumns(columns => columns.map(column =>
-      column.id === id
-        ? newColumn
-        : column
-    ));
-  }
-
-  const deleteColumn = (id: string) => {
-    store.deleteColumn(id);
-    setColumns(columns => columns.filter(column => column.id !== id));
-  }
-
-  const fetchColumns = () => {
-    const columnsBuStore = store.getColumns();
-    setColumns(columnsBuStore);
-  }
-
-  const fetchUser = () => {
-    const user = store.getUser();
-    if (!user) {
-      setIsOpen(true);
-    }
-    setUser(user);
-  }
-
-  useEffect(() => {
-    fetchColumns();
-    fetchUser();
-  }, [])
-
-  useEffect(() => {
-    setUserName('')
-  }, [isOpen])
 
   const renderColumns = () => {
     if (!columns) {
@@ -78,8 +26,6 @@ function App() {
       <Column
         key={column.id}
         column={column}
-        updateColumn={updateColumn}
-        deleteColumn={deleteColumn}
       />
     )
   }
@@ -87,21 +33,30 @@ function App() {
   return (
     <>
       <Normalize />
-      <Header user={user} deleteUser={deleteUser} isSignIn={() => setIsOpen(true)} />
+      <Header setIsOpen={setIsOpen} />
       <Body>
         <SColumns>
           {renderColumns()}
-          <CreateColumn createColumn={createColumn} />
+          <CreateColumn />
         </SColumns>
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-          <SFormAuth>
-            <SFormTitle>Введите свое имя</SFormTitle>
-            <Input
-              value={userName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
-            />
-            <Button isColor={true} onClick={createUser} >Войти</Button>
-          </SFormAuth>
+          <Form
+            onSubmit={handleSubmit}
+            render={({ handleSubmit, pristine }) => (
+              <SFormAuth onSubmit={handleSubmit}>
+                <SFormTitle>Введите свое имя</SFormTitle>
+                <Field
+                  name='name'
+                  component={Input}
+                />
+                <Button
+                  type='submit'
+                  disabled={pristine}
+                  isColor={true}
+                >Войти</Button>
+              </SFormAuth>
+            )}
+          />
         </Modal>
       </Body>
     </>
@@ -119,7 +74,7 @@ const SColumns = styled.div`
   margin: 0 5vh;
 `;
 
-const SFormAuth = styled.div`
+const SFormAuth = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;

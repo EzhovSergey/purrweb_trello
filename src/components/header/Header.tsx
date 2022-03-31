@@ -1,24 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { User } from "../../types";
-import { Button } from "../../ui";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { Button } from "ui";
+import { actions, selectors } from "store";
 
-const Header = ({ user, isSignIn, deleteUser }: HeaderProps) => {
+const Header = ({ setIsOpen }: HeaderProps) => {
+  const userName = useAppSelector(selectors.user.selectName);
+  const dispatch = useAppDispatch();
+
   return (
     <Root>
       {
-        user
+        userName
           ?
           <>
             <UserName>
-              {user.name}
+              {userName}
             </UserName>
-            <Button isColor={true} onClick={() => deleteUser()}>
+            <Button isColor={true} onClick={() => dispatch(actions.user.deleteUser())}>
               Выйти
             </Button>
           </>
           :
-          <Button isColor={true} onClick={() => isSignIn()}>
+          <Button isColor={true} onClick={() => setIsOpen(true)}>
             Войти
           </Button>
       }
@@ -30,9 +34,7 @@ const Header = ({ user, isSignIn, deleteUser }: HeaderProps) => {
 export default Header;
 
 type HeaderProps = {
-  user?: User;
-  isSignIn: () => void;
-  deleteUser: () => void;
+  setIsOpen: (value: boolean) => void;
 }
 
 const Root = styled.header`

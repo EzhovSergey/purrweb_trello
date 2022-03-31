@@ -1,28 +1,48 @@
 import React, { useState } from "react";
+import { Field, Form } from "react-final-form";
 import styled from "styled-components";
-import { Comment as CommentType } from "../../../../../../types";
-import { Button, Input } from "../../../../../../ui";
+import { useAppDispatch } from "hooks";
+import { actions } from "store";
+import { Comment as CommentType } from "types";
+import { Button, Input } from "ui";
 
-const Comment = ({ comment, updateComment, deleteComment }: CommentProps) => {
+const Comment = ({ comment }: CommentProps) => {
+  const dispatch = useAppDispatch();
   const [isUpdate, setIsUpdate] = useState(false);
-  const [commentValue, setCommentValue] = useState(comment.body);
 
-  const handleUpdateComment = () => {
-    updateComment(comment.id, commentValue);
+  const handleSubmit = (values: { comment: string }) => {
+    dispatch(actions.comments.updateComment({ id: comment.id, body: values.comment }))
     setIsUpdate(false)
-    setCommentValue('');
   }
 
   const renderComment = () => {
     if (isUpdate) {
       return (
-        <>
-          <Input value={commentValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCommentValue(e.target.value)} />
-          <Buttons>
-            <Button isColor={true} onClick={() => handleUpdateComment()}>Сохранить</Button>
-            <Button onClick={() => setIsUpdate(false)}>&#10006;</Button>
-          </Buttons>
-        </>
+        <Form
+          onSubmit={handleSubmit}
+          initialValues={{
+            comment: comment.body,
+          }}
+          render={({ handleSubmit, pristine }) => (
+            <FormBody onSubmit={handleSubmit}>
+              <Field
+                name='comment'
+                component={Input}
+              />
+              <Buttons>
+                <Button
+                  type='submit'
+                  disabled={pristine}
+                  isColor={true}
+                >Сохранить</Button>
+                <Button
+                  type='reset'
+                  onClick={() => setIsUpdate(false)
+                  }>&#10006;</Button>
+              </Buttons>
+            </FormBody>
+          )}
+        />
       )
     }
 
@@ -31,7 +51,7 @@ const Comment = ({ comment, updateComment, deleteComment }: CommentProps) => {
         <CommentText>{comment.body}</CommentText>
         <Buttons>
           <Button onClick={() => setIsUpdate(true)}>Изменить</Button>
-          <Button onClick={() => deleteComment(comment.id)}>Удалить</Button>
+          <Button onClick={() => dispatch(actions.comments.deleteComment({ id: comment.id }))}>Удалить</Button>
         </Buttons>
       </>
     )
@@ -51,8 +71,6 @@ export default Comment;
 
 type CommentProps = {
   comment: CommentType;
-  updateComment: (id: string, body: string) => void;
-  deleteComment: (id: string) => void;
 }
 
 
@@ -63,7 +81,19 @@ const Root = styled.div`
 `;
 
 const Buttons = styled.div`
-  
+  margin-top: .3em;
+`;
+
+const FormBody = styled.form`
+  > Input {
+    box-sizing: border-box;
+    margin-top: .5em;
+    width: 100%;
+  }
+
+  > Button {
+    margin: 1em .5em 1em 0;
+  }
 `;
 
 const CommentText = styled.span`

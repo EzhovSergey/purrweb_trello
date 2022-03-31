@@ -1,42 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
-import { Column as ColumnType, Card as CardType } from '../../types';
+import { Column as ColumnType } from 'types';
 import { Card } from '..';
 import { CreateCard } from './components'
-import { Button, Input } from '../../ui';
-import { store } from '../../store';
+import { Button, Input } from 'ui';
+import { actions, selectors } from 'store';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { Field, Form } from 'react-final-form';
 
-const Column = ({ column, updateColumn, deleteColumn }: ColumnProps) => {
-  const [cards, setCards] = useState<CardType[]>([]);
-  const [name, setName] = useState(column.name);
+const Column = ({ column }: ColumnProps) => {
+  const cards = useAppSelector(selectors.cards.selectByColumnId(column.id));
+  const dispatch = useAppDispatch();
 
-  const createCard = (name: string) => {
-    const newCard = store.createCard(column.id, name);
-    setCards(cards => [...cards, newCard]);
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.columns.updateColumn({ id: column.id, name: values.name }))
   }
-
-  const updateCard = (id: string, name?: string, content?: string) => {
-    const newCard = store.updateCard(id, name, content);
-    setCards(cards => cards.map(card =>
-      card.id === id
-        ? newCard
-        : card
-    ));
-  }
-
-  const deleteCard = (id: string) => {
-    store.deleteCard(id);
-    setCards(cards => cards.filter(card => card.id !== id));
-  }
-
-  const fetchCards = () => {
-    const cardsByStore = store.getCardsByColumnId(column.id);
-    setCards(cardsByStore);
-  }
-
-  useEffect(() => {
-    fetchCards();
-  }, [])
 
   const renderCards = () => {
     if (!cards) {
@@ -47,8 +25,6 @@ const Column = ({ column, updateColumn, deleteColumn }: ColumnProps) => {
       <Card
         key={card.id}
         card={card}
-        updateCard={updateCard}
-        deleteCard={deleteCard}
       />
     )
   }
@@ -56,16 +32,24 @@ const Column = ({ column, updateColumn, deleteColumn }: ColumnProps) => {
   return (
     <Root>
       <Title>
-        <Input
-          value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-          onBlur={() => updateColumn(column.id, name)}
-          isTransparent={true}
+        <Form
+          onSubmit={handleSubmit}
+          initialValues={{
+            name: column.name
+          }}
+          render={({ handleSubmit }) => (
+            <Field
+              name='name'
+              component={Input}
+              onBlur={handleSubmit}
+              isTransparent={true}
+            />
+          )}
         />
-        <Button onClick={() => deleteColumn(column.id)}>&#10006;</Button>
+        <Button onClick={() => dispatch(actions.columns.deleteColumn({ id: column.id }))}>&#10006;</Button>
       </Title>
       {renderCards()}
-      <CreateCard createCard={createCard} />
+      <CreateCard columnId={column.id} />
     </Root>
   )
 }
@@ -74,8 +58,6 @@ export default Column;
 
 type ColumnProps = {
   column: ColumnType;
-  updateColumn: (id: string, value: string) => void;
-  deleteColumn: (id: string) => void;
 }
 
 const Root = styled.section`

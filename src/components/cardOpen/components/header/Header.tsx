@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
-import { Card } from '../../../../types';
-import { store } from '../../../../store';
-import { Input } from '../../../../ui';
+import { Card } from 'types';
+import { actions, selectors } from 'store';
+import { Input } from 'ui';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { Field, Form } from 'react-final-form';
 
-const Header = ({ card, updateCard }: HeaderProps) => {
-  const [columnName, setColumnName] = useState(card.name)
+const Header = ({ card }: HeaderProps) => {
+  const columnsName = useAppSelector(selectors.columns.selectName(card.columnId))
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (values: { name: string }) => {
+    dispatch(actions.cards.updateCard({ id: card.id, name: values.name }))
+  }
 
   return (
     <Root>
-      <Input
-        value={columnName}
-        isTransparent={true}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setColumnName(e.target.value)}
-        onBlur={() => updateCard({ name: columnName })}
+      <Form
+        onSubmit={handleSubmit}
+        initialValues={{
+          name: card.name
+        }}
+        render={({ handleSubmit }) => (
+          <Field
+            name='name'
+            component={Input}
+            onBlur={handleSubmit}
+            isTransparent={true}
+          />
+        )}
       />
       <Info>
-        в колонке <u>{store.getColumnOne(card.columnId).name}</u>&nbsp;
-        автор колонки <u>{card.authorName}</u>
+        в колонке <u>{columnsName}</u>&nbsp;
+        автор карточки <u>{card.authorName}</u>
       </Info>
     </Root>
   )
@@ -27,7 +42,6 @@ export default Header;
 
 type HeaderProps = {
   card: Card;
-  updateCard: (updateCard: { name?: string, content?: string }) => void;
 }
 
 const Root = styled.header`

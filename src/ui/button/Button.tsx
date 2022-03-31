@@ -5,7 +5,7 @@ const Button = (props: ButtonProps) => {
 
   return (
     <Root
-      theme={{ ...props }}
+      theme={{ ...props, disabled: props.disabled ? 0.5 : 1 }}
       {...props}
     >
       {props.children}
@@ -15,14 +15,15 @@ const Button = (props: ButtonProps) => {
 
 export default Button;
 
-type ButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   isColor?: boolean;
   width?: number;
 }
 
 const Root = styled.button`
-  background-color: ${({ theme: { isColor } }) => isColor ? '#1E90FF' : 'transparent'};
+  background-color: ${({ theme: { isColor, disabled } }) => isColor ? `rgba(30, 144, 255, ${disabled})` : 'transparent'};
   color: ${({ theme: { isColor } }) => isColor ? '#FFFFFF' : 'gray'};
+
   border-radius: 2px;
   border: none;
   width: ${({ theme: { width } }) => width + 'px' || 'max-content'};
