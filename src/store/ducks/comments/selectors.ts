@@ -1,5 +1,8 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "store";
 
-export const all = (id: string) => (state: RootState) => state.comments.filter(comment => comment.cardId === id);
+export const selectAll = (state: RootState) => state.comments;
 
-export const count = (id: string) => (state: RootState) => state.comments.filter(comment => comment.cardId === id).length;
+export const selectByCardId = (id: string) => createSelector(selectAll, comments => comments.filter(comment => comment.cardId === id));
+
+export const selectByCardIdCount = (id: string) => createSelector(selectByCardId(id), cards => cards.length);

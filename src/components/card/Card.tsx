@@ -7,7 +7,7 @@ import { CardOpen } from 'components';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 const Card = ({ card }: CardProps) => {
-  const countComments = useAppSelector(selectors.comments.count(card.id));
+  const countComments = useAppSelector(selectors.comments.selectByCardIdCount(card.id));
   const dispatch = useAppDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
 

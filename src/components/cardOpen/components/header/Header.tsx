@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 import { Field, Form } from 'react-final-form';
 
 const Header = ({ card }: HeaderProps) => {
-  const columnsName = useAppSelector(selectors.columns.name(card.columnId))
+  const columnsName = useAppSelector(selectors.columns.selectName(card.columnId))
   const dispatch = useAppDispatch();
 
   const handleSubmit = (values: { name: string }) => {
@@ -32,7 +32,7 @@ const Header = ({ card }: HeaderProps) => {
       />
       <Info>
         в колонке <u>{columnsName}</u>&nbsp;
-        автор колонки <u>{card.authorName}</u>
+        автор карточки <u>{card.authorName}</u>
       </Info>
     </Root>
   )

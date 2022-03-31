@@ -5,7 +5,7 @@ import { Button } from "ui";
 import { actions, selectors } from "store";
 
 const Header = ({ setIsOpen }: HeaderProps) => {
-  const userName = useAppSelector(selectors.user.name);
+  const userName = useAppSelector(selectors.user.selectName);
   const dispatch = useAppDispatch();
 
   return (

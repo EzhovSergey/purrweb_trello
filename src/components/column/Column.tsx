@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 import { Field, Form } from 'react-final-form';
 
 const Column = ({ column }: ColumnProps) => {
-  const cards = useAppSelector(selectors.cards.all(column.id));
+  const cards = useAppSelector(selectors.cards.selectByColumnId(column.id));
   const dispatch = useAppDispatch();
 
   const handleSubmit = (values: { name: string }) => {

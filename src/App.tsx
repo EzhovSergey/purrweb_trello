@@ -8,7 +8,7 @@ import { Button, Input, Modal } from './ui';
 import { useAppDispatch, useAppSelector } from './hooks';
 
 function App() {
-  const columns = useAppSelector(selectors.columns.all);
+  const columns = useAppSelector(selectors.columns.selectAll);
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
 

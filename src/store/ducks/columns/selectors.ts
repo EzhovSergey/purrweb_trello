@@ -1,5 +1,6 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "store";
 
-export const all = (state: RootState) => state.columns;
+export const selectAll = (state: RootState) => state.columns;
 
-export const name = (id: string) => (state: RootState) => state.columns.find(column => column.id === id)?.name
+export const selectName = (id: string) => createSelector(selectAll, (columns) => columns.find(column => column.id === id)?.name)

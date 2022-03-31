@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 import { Field, Form } from 'react-final-form';
 
 const Comments = ({ cardId }: CommentsProps) => {
-  const comments = useAppSelector(selectors.comments.all(cardId));
-  const userName = useAppSelector(selectors.user.name);
+  const comments = useAppSelector(selectors.comments.selectByCardId(cardId));
+  const userName = useAppSelector(selectors.user.selectName);
   const dispatch = useAppDispatch();
   const [isCreateComment, setIsCreateComment] = useState(false);
 
